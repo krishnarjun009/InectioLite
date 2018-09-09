@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
 namespace Inectio.Lite
 {
@@ -7,6 +8,8 @@ namespace Inectio.Lite
     {
         private IInjectionBinder _injectionBinder;
         public static RootContext singletonContext;
+        private static event Action<IView> injectHandler;
+        private static List<IView> views = new List<IView>();
 
         public IInjectionBinder injectionBinder
         {
@@ -22,9 +25,27 @@ namespace Inectio.Lite
 
         public RootContext()
         {
+            //injectHandler += InjectViewHanlder;
             if (singletonContext == null)
                 singletonContext = this;
             Initialize();
+        }
+
+        public static void AddView(IView view)
+        {
+            //UnityEngine.Debug.Log("Adding view " + view);
+            if (!views.Contains(view))
+                views.Add(view);
+        }
+
+        //~ RootContext()
+        //{
+        //    injectHandler -= InjectViewHanlder;
+        //}
+
+        private void InjectViewHanlder(IView view)
+        {
+            injectionBinder.TryToInject(view);
         }
 
         virtual public void MapBindings()
@@ -35,9 +56,14 @@ namespace Inectio.Lite
         private void Initialize()
         {
             MapBindings();
+            foreach(var view in views)
+            {
+                UnityEngine.Debug.Log("View " + view);
+                injectionBinder.TryToInject(view);
+            }
         }
 
-        ~RootContext()
+        ~ RootContext()
         {
             singletonContext = null;
         }

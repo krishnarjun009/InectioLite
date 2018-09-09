@@ -44,7 +44,7 @@ namespace Inectio.Lite
                     {
                         //todo: remove delegate attached delegate for the current method...
                         var binding = injectionBinder.GetBinding(method.methodListenType);
-                        var obj = GetInstance(binding) as Signal;
+                        var obj = GetInstance(binding) as ISignal;
                         if (obj != null)
                             RemoveDelegate(target, obj, method.info);
                     }
@@ -101,7 +101,8 @@ namespace Inectio.Lite
                         //todo: Create delegate for this method and signal.
                         //UnityEngine.Debug.Log("Creating delegate here " + method.methodListenType);
                         var binding = injectionBinder.GetBinding(method.methodListenType);
-                        var obj = GetInstance(binding) as Signal;
+                        var obj = GetInstance(binding) as ISignal;
+                        UnityEngine.Debug.Log("Siganl " + obj);
                         if(obj != null)
                             AddDelegate(target, obj, method.info);
                     }
@@ -110,20 +111,23 @@ namespace Inectio.Lite
         }
 
         //both add and remove delegate methods are taken from strange since it is common function...
-        private void AddDelegate(object target, Signal signal, MethodInfo method)
+        private void AddDelegate(object target, ISignal signal, MethodInfo method)
         {
             if (signal.GetType().BaseType.IsGenericType)
             {
+                //UnityEngine.Debug.Log("Adding delegate to " + target);
                 var toAdd = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Combine(signal.Listener, toAdd);
             }
             else
             {
-                signal.AddListener((Action)Delegate.CreateDelegate(typeof(Action), target, method));
+                //UnityEngine.Debug.Log("nono generic Adding delegate to " + target);
+                var s = signal as Signal;
+                s.AddListener((Action)Delegate.CreateDelegate(typeof(Action), target, method));
             }
         }
 
-        private void RemoveDelegate(object target, Signal signal, MethodInfo method)
+        private void RemoveDelegate(object target, ISignal signal, MethodInfo method)
         {
             if (signal.GetType().BaseType.IsGenericType)
             {
@@ -133,7 +137,8 @@ namespace Inectio.Lite
             else
             {
                 //UnityEngine.Debug.Log("Removing Listener " + method.Name);
-                ((Signal)signal).RemoveListener((Action)Delegate.CreateDelegate(typeof(Action), target, method));
+                var s = signal as Signal;
+                s.RemoveListener((Action)Delegate.CreateDelegate(typeof(Action), target, method));
             }
         }
     }
