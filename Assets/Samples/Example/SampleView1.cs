@@ -7,6 +7,8 @@ namespace Sample
     public class SampleView1 : View
     {
         [Inject] private TestSignal testSignal;
+        [Inject] private SampleData data;
+        [Inject] private ISample sample;
 
 		public override void OnRegister()
 		{
@@ -26,6 +28,7 @@ namespace Sample
         [Listen(typeof(TestSignal))]
         private void ListenMethodTest()
         {
+            data.Print();
             Debug.Log("SampleView 1 at Listen method " + gameObject.name);
         }
     }
