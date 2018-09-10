@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Inectio.Lite
 {
-    public class CoreBinder : ICoreBinder
+    public class CoreBinder : ICoreBinder, IDisposable
     {        
         public enum BindingNameType
         {
@@ -151,6 +151,17 @@ namespace Inectio.Lite
                     throw new InectioException(conflict.Value + " is duplicate name for " + conflict.Key);
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            UnityEngine.Debug.Log("Disposing Bindings");
+            bindings.Clear();
+        }
+
+        ~ CoreBinder()
+        {
+            Dispose();
         }
     }
 }

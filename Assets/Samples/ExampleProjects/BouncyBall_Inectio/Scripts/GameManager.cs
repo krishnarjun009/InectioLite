@@ -54,6 +54,5 @@ namespace com.bonucyballs.inectio
             Destroy(currentLevelInstance);
             currentLevelInstance = null;
         }
-
     }
 }

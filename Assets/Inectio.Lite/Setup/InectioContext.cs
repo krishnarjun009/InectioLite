@@ -11,11 +11,11 @@ namespace Inectio.Lite
         
 		public override void MapBindings()
 		{
-            //injectionBinder.Map<SampleData>();
-            //injectionBinder.Map<TestSignal>();
-            //injectionBinder.Map<JumpInputSignal>();
-            //injectionBinder.Map<OnPlayerDiedSignal>();
-            //injectionBinder.Map<ISample, SampleData>();
+            injectionBinder.Map<SampleData>();
+            injectionBinder.Map<TestSignal>();
+            injectionBinder.Map<JumpInputSignal>();
+            injectionBinder.Map<OnPlayerDiedSignal>();
+            injectionBinder.Map<ISample, SampleData>();
 
 
             //Bouncy Ball Inections...

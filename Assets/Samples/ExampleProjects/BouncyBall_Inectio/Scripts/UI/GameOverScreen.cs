@@ -11,6 +11,7 @@ namespace com.bonucyballs.inectio
         [Inject] private OnNextLevelClickSignal nextLevelClickSignal { get; set; }
 
         [SerializeField] private Text levelText;
+        [SerializeField] private GameObject mainPanel;
 
         public override void OnRegister()
         {
@@ -24,14 +25,13 @@ namespace com.bonucyballs.inectio
 
         private void OnGameOverHandler()
         {
-            gameObject.SetActive(true);
+            mainPanel.SetActive(true);
         }
 
         [Listen(typeof(GameStartNotifierSignal))]
         private void OnGameStart(int level)
         {
-            if (gameObject.activeSelf)
-                gameObject.SetActive(false);
+            mainPanel.SetActive(false);
         }
 
         public void OnReloadClick()
