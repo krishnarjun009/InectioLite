@@ -9,6 +9,8 @@ namespace com.bonucyballs.inectio
     {
         [Inject] private LevelCompletedSignal levelCompletedSignal { get; set; }
         [Inject] private OnNextLevelClickSignal nextLevelClickSignal { get; set; }
+        [Inject] private OnReloadLevelClickSignal reloadLevelClickSignal;
+        [Inject] private OnHomeClickSignal onHomeClickSignal;
 
         [SerializeField] private Text levelText;
         [SerializeField] private GameObject mainPanel;
@@ -36,12 +38,14 @@ namespace com.bonucyballs.inectio
 
         public void OnReloadClick()
         {
-
+            mainPanel.SetActive(false);
+            reloadLevelClickSignal.Dispatch();
         }
 
         public void OnHomeClick()
         {
-
+            mainPanel.SetActive(false);
+            onHomeClickSignal.Dispatch();
         }
 
         public void OnNextLevelClick()

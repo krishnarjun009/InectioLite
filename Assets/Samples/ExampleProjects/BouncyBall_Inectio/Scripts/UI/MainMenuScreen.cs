@@ -16,5 +16,11 @@ namespace com.bonucyballs.inectio
             onPlayClickSignal.Dispatch();
             gameObject.SetActive(false);
         }
+
+        [Listen(typeof(OnHomeClickSignal))]
+        private void OnHomeClickHandler()
+        {
+            gameObject.SetActive(true);
+        }
     }
 }

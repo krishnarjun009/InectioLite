@@ -15,24 +15,18 @@ namespace com.bonucyballs.inectio
         {
             Destroy(currentLevelInstance);
             currentLevelInstance = null;
-
             gameData.SaveCurrentLevel();
-
-            GameObject go = Resources.Load<GameObject>("Prefabs/Levels/Level-" + gameData.Level);
-
-            if (go == null)
-            {
-                go = Resources.Load<GameObject>("Prefabs/Levels/Level-" + UnityEngine.Random.Range(1, gameData.Level - 1));
-            }
-
-            currentLevelInstance = Instantiate(go);
+            currentLevelInstance = GetLevel(gameData.Level);
             gameStartNotifierSignal.Dispatch(gameData.Level);
         }
 
         [Listen(typeof(OnReloadLevelClickSignal))]
         private void OnReloadLevelHanlder()
         {
-
+            Destroy(currentLevelInstance);
+            currentLevelInstance = null;
+            currentLevelInstance = GetLevel(gameData.Level - 1);
+            gameStartNotifierSignal.Dispatch(gameData.Level);
         }
 
         [Listen(typeof(OnPlayClickSignal))]
@@ -43,7 +37,7 @@ namespace com.bonucyballs.inectio
                 DestroyImmediate(currentLevelInstance);
                 currentLevelInstance = null;
             }
-            currentLevelInstance = Instantiate(Resources.Load<GameObject>("Prefabs/Levels/Level-" + gameData.Level));
+            currentLevelInstance = GetLevel(gameData.Level);
             gameStartNotifierSignal.Dispatch(gameData.Level);
             Time.timeScale = 1;
         }
@@ -53,6 +47,18 @@ namespace com.bonucyballs.inectio
         {
             Destroy(currentLevelInstance);
             currentLevelInstance = null;
+        }
+
+        private GameObject GetLevel(int level)
+        {
+            GameObject go = Resources.Load<GameObject>("Prefabs/Levels/Level-" + (gameData.Level - 1));
+
+            if (go == null)
+            {
+                go = Resources.Load<GameObject>("Prefabs/Levels/Level-" + UnityEngine.Random.Range(1, gameData.Level - 1));
+            }
+
+            return Instantiate(go);
         }
     }
 }
