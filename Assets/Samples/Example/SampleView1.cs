@@ -22,14 +22,14 @@ namespace Sample
 
         private void OnTestSignal()
         {
-            Debug.Log("SampleView 1 " + gameObject.name);
+            //Debug.Log("SampleView 1 " + gameObject.name);
         }
 
         [Listen(typeof(TestSignal))]
         private void ListenMethodTest()
         {
             data.Print();
-            Debug.Log("SampleView 1 at Listen method " + gameObject.name);
+            //Debug.Log("SampleView 1 at Listen method " + gameObject.name);
         }
     }
 }

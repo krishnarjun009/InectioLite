@@ -9,6 +9,7 @@ namespace Sample
         [Inject] private SampleData data { get; set; }
         [Inject] private TestSignal testSignal;
         [Inject] private commandsignal commandsignal { get; set; }
+        [Inject] private commandsignal1 commandsignal1 { get; set; }
 
         protected override void Awake()
 		{
@@ -27,11 +28,12 @@ namespace Sample
         public bool enableDebug = false;
 		private void Update()
 		{
-            commandsignal.Dispatch(5);
-            //testSignal.Dispatch();
-            var test = asTest as asTest;
-            if(enableDebug)
-                test.Print();
+            commandsignal.DispatchToAll(5, "krishna");
+            commandsignal1.DispatchToAll(10, "anji1");
+            testSignal.DispatchToAll();
+            //var test = asTest as asTest;
+            //if(enableDebug)
+            //    test.Print();
 		}
 
 		//[Inject]
