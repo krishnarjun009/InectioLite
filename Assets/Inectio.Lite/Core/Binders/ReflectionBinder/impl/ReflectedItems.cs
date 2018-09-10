@@ -15,10 +15,10 @@ namespace Inectio.Lite
     public class PropertyAttributes
     {
         public PropertyInfo info { get; private set; }
-        public object name { get; private set; }
+        public string name { get; private set; }
         public Type type { get; private set; }
 
-        public PropertyAttributes(PropertyInfo info, object name, Type type)
+        public PropertyAttributes(PropertyInfo info, string name, Type type)
         {
             this.info = info;
             this.name = name;
@@ -29,12 +29,12 @@ namespace Inectio.Lite
     public class MethodAttributes
     {
         public MethodInfo info { get; private set; }
-        public object name { get; private set; }
+        public string name { get; private set; }
         public Type type { get; private set; }
         public MethodParamAttributes[] methodParams { get; private set; }
         public Type methodListenType { get; set; }
 
-        public MethodAttributes(MethodInfo info, object name, Type type, MethodParamAttributes[] methodParams)
+        public MethodAttributes(MethodInfo info, string name, Type type, MethodParamAttributes[] methodParams)
         {
             this.info = info;
             this.name = name;
@@ -46,10 +46,10 @@ namespace Inectio.Lite
     public class MethodParamAttributes
     {
         public ParameterInfo info { get; private set; }
-        public object name { get; private set; }
+        public string name { get; private set; }
         public Type type { get; private set; }
 
-        public MethodParamAttributes(ParameterInfo info, object name, Type type)
+        public MethodParamAttributes(ParameterInfo info, string name, Type type)
         {
             this.info = info;
             this.name = name;
@@ -60,10 +60,10 @@ namespace Inectio.Lite
     public class FieldAttributes
     {
         public FieldInfo info { get; private set; }
-        public object name { get; private set; }
+        public string name { get; private set; }
         public Type type { get; private set; }
 
-        public FieldAttributes(FieldInfo info, object name, Type type)
+        public FieldAttributes(FieldInfo info, string name, Type type)
         {
             this.info = info;
             this.name = name;

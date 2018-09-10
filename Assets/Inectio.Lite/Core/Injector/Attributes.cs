@@ -7,11 +7,11 @@ namespace Inectio.Lite
         Inherited = true)]
     public class Inject : Attribute
     {
-        public object name { get; set; }
+        public string name { get; set; }
 
         public Inject() { }
 
-        public Inject(object name)
+        public Inject(string name)
         {
             this.name = name;
         }

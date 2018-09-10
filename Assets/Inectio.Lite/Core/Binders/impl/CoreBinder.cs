@@ -10,14 +10,14 @@ namespace Inectio.Lite
             NULL
         }
         
-        protected readonly Dictionary<Type, Dictionary<object, IBinding>> bindings;
+        protected readonly Dictionary<Type, Dictionary<string, IBinding>> bindings;
         private readonly Dictionary<IBinding, object> conflicts;
 
         public delegate void Resolver(IBinding binding);
 
         public CoreBinder()
         {
-            bindings = new Dictionary<Type, Dictionary<object, IBinding>>();
+            bindings = new Dictionary<Type, Dictionary<string, IBinding>>();
             conflicts = new Dictionary<IBinding, object>();
         }
 
@@ -45,8 +45,8 @@ namespace Inectio.Lite
 
         virtual public void ResolveBinding(IBinding binding)
         {
-            object _name = binding.Name == null ? BindingNameType.NULL : binding.Name;
-            Dictionary<object, IBinding> values;
+            string name = String.IsNullOrEmpty(binding.Name) ? "" : binding.Name;
+            Dictionary<string, IBinding> values;
             //IBinding prevBinding = null;
 
             //if(!conflicts.ContainsKey(binding))
@@ -84,20 +84,20 @@ namespace Inectio.Lite
             }
             else
             {
-                values = new Dictionary<object, IBinding>();
+                values = new Dictionary<string, IBinding>();
                 bindings[binding.Key] = values;
             }
 
             //Remove nulloid bindings
-            if (values.ContainsKey(BindingNameType.NULL) && values[BindingNameType.NULL].Equals(binding))
+            if (values.ContainsKey("") && values[""].Equals(binding))
             {
-                values.Remove(BindingNameType.NULL);
+                values.Remove("");
             }
 
             //do not add duplicate bindings...
-            if(!values.ContainsKey(_name))
+            if(!values.ContainsKey(name))
             {
-                values[_name] = binding;
+                values[name] = binding;
             }
 
             //prevBinding = binding;
@@ -108,9 +108,9 @@ namespace Inectio.Lite
             return GetBinding(key, null);
         }
 
-        virtual public IBinding GetBinding(Type key, object name)
+        virtual public IBinding GetBinding(Type key, string name)
         {
-            name = (name == null) ? BindingNameType.NULL : name;
+            name = String.IsNullOrEmpty(name) ? "" : name;
             if (bindings.ContainsKey(key))
             {
                 var values = bindings[key];

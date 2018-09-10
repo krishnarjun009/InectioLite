@@ -10,5 +10,10 @@ namespace Inectio.Lite
 		{
             context = new InectioContext();
 		}
-	}
+
+        private void OnDestroy()
+        {
+            context.OnRemove();
+        }
+    }
 }

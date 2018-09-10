@@ -11,14 +11,14 @@ namespace Inectio.Lite
     public interface IBinding
     {
         IBinding Map(Type key, object value);
-        IBinding ToName(object name);
+        IBinding ToName(string name);
         IBinding ToValue(object value);
         IBinding ToSingle();
         IBinding ToMultiple();
 
         Type Key { get; }
         object Value { get; }
-        object Name { get; }
+        string Name { get; }
         InstanceType Instance { get; }
     }
 
@@ -27,12 +27,12 @@ namespace Inectio.Lite
         protected CoreBinder.Resolver resolver;
         protected Type key;
         protected object value;
-        protected object name;
+        protected string name;
         protected InstanceType instanceType;
 
         public Type Key { get { return key; } }
         public object Value { get { return value; } }
-        public object Name { get { return name; } }
+        public string Name { get { return name; } }
         public InstanceType Instance { get { return instanceType; }}
 
         public Binding(CoreBinder.Resolver resolver)
@@ -49,7 +49,7 @@ namespace Inectio.Lite
             return this;
         }
 
-        virtual public IBinding ToName(object name)
+        virtual public IBinding ToName(string name)
         {
             this.name = name;
             Resolve();

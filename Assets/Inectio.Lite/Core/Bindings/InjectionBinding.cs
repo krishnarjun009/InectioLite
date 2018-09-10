@@ -6,13 +6,13 @@ namespace Inectio.Lite
     {
         IInjectionBinding Map(Type key, object value);
         void SetValue(object value);
-        IInjectionBinding ToName(object name);
+        IInjectionBinding ToName(string name);
         IInjectionBinding ToValue(object value);
         IInjectionBinding ToSingle();
         IInjectionBinding ToMultiple();
         Type Key { get; }
         object Value { get; }
-        object Name { get; }
+        string Name { get; }
         InstanceType Instance { get; }
     }
 
@@ -32,7 +32,7 @@ namespace Inectio.Lite
             return base.Map(key, value) as IInjectionBinding;
 		}
 
-        new public IInjectionBinding ToName(object name)
+        new public IInjectionBinding ToName(string name)
         {
             return base.ToName(name) as IInjectionBinding;
         }

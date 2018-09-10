@@ -15,17 +15,9 @@ namespace Inectio.Lite
         void RemoveAllListeners();
     }
 
-    public interface IGenericCommand
+    public class BaseSignal : IBaseSignal
     {
-        int GenericValue { get; }
-    }
-
-    public class BaseSignal : IGenericCommand, IBaseSignal
-    {
-        private event Action commandListener;
-
-        public int GenericValue { get { return 0; }}
-
+        private event Action<IBaseSignal> commandListener;
         public Delegate Listener
         {
             get
@@ -34,16 +26,16 @@ namespace Inectio.Lite
             }
             set
             {
-                commandListener = (Action)value;
+                commandListener = (Action<IBaseSignal>)value;
             }
         }
 
-        public virtual void AddListener(Action callback)
+        public virtual void AddListener(Action<IBaseSignal> callback)
         {
             commandListener = Add(commandListener, callback);
         }
 
-        public virtual void RemoveListener(Action callback)
+        public virtual void RemoveListener(Action<IBaseSignal> callback)
         {
             if (commandListener != null || commandListener.GetInvocationList().Contains(callback))
             {
@@ -54,10 +46,10 @@ namespace Inectio.Lite
         public virtual void Dispatch()
         {
             if (commandListener != null)
-                commandListener();
+                commandListener(this);
         }
 
-        private Action Add(Action _listener, Action action)
+        private Action<IBaseSignal> Add(Action<IBaseSignal> _listener, Action<IBaseSignal> action)
         {
             if(_listener == null || !_listener.GetInvocationList().Contains(action))
             {
@@ -69,22 +61,31 @@ namespace Inectio.Lite
 
         public void RemoveAllListeners()
         {
-            throw new NotImplementedException();
+            commandListener = null;
         }
     }
 
-    public class BaseSignal<T> : IGenericCommand
+    public class BaseSignal<T> : IBaseSignal
     {
-        private event Action<T> commandListener;
+        private event Action<IBaseSignal, T> commandListener;
+        public Delegate Listener
+        {
+            get
+            {
+                return commandListener ?? (commandListener = delegate { });
+            }
+            set
+            {
+                commandListener = (Action<IBaseSignal, T>)value;
+            }
+        }
 
-        public int GenericValue { get { return 1; } }
-
-        public virtual void AddListener(Action<T> callback)
+        public virtual void AddListener(Action<IBaseSignal, T> callback)
         {
             commandListener = Add(commandListener, callback);
         }
 
-        public virtual void RemoveListener(Action<T> callback)
+        public virtual void RemoveListener(Action<IBaseSignal, T> callback)
         {
             if (commandListener != null || commandListener.GetInvocationList().Contains(callback))
             {
@@ -95,10 +96,10 @@ namespace Inectio.Lite
         public virtual void Dispatch(T type)
         {
             if (commandListener != null)
-                commandListener(type);
+                commandListener(this, type);
         }
 
-        private Action<T> Add(Action<T> _listener, Action<T> action)
+        private Action<IBaseSignal, T> Add(Action<IBaseSignal, T> _listener, Action<IBaseSignal, T> action)
         {
             if (_listener == null || !_listener.GetInvocationList().Contains(action))
             {
@@ -106,6 +107,62 @@ namespace Inectio.Lite
             }
 
             return _listener;
+        }
+
+        public void RemoveAllListeners()
+        {
+            commandListener = null;
+        }
+    }
+
+    public class BaseSignal<T, U> : IBaseSignal
+    {
+        private event Action<IBaseSignal, T, U> commandListener;
+
+        public Delegate Listener
+        {
+            get
+            {
+                return commandListener ?? (commandListener = delegate { });
+            }
+            set
+            {
+                commandListener = (Action<IBaseSignal, T, U>)value;
+            }
+        }
+
+        public virtual void AddListener(Action<IBaseSignal, T, U> callback)
+        {
+            commandListener = Add(commandListener, callback);
+        }
+
+        public virtual void RemoveListener(Action<IBaseSignal, T, U> callback)
+        {
+            if (commandListener != null || commandListener.GetInvocationList().Contains(callback))
+            {
+                commandListener -= callback;
+            }
+        }
+
+        public virtual void Dispatch(T type, U type2)
+        {
+            if (commandListener != null)
+                commandListener(this, type, type2);
+        }
+
+        private Action<IBaseSignal, T, U> Add(Action<IBaseSignal, T, U> _listener, Action<IBaseSignal, T, U> action)
+        {
+            if (_listener == null || !_listener.GetInvocationList().Contains(action))
+            {
+                _listener += action;
+            }
+
+            return _listener;
+        }
+
+        public void RemoveAllListeners()
+        {
+            commandListener = null;
         }
     }
 
@@ -125,12 +182,12 @@ namespace Inectio.Lite
 
         private event Action listener;
 
-        public override void AddListener(Action callback)
+        public void AddListener(Action callback)
         {
             listener = AddUnique(listener, callback);
         }
 
-        public override void RemoveListener(Action callback)
+        public void RemoveListener(Action callback)
         {
             if (callback != null && listener.GetInvocationList().Contains(callback))
             {
@@ -139,7 +196,7 @@ namespace Inectio.Lite
             }
         }
 
-        public void RemoveAllListeners()
+        new public void RemoveAllListeners()
         {
             listener = null;
         }
@@ -167,9 +224,9 @@ namespace Inectio.Lite
         }
     }
 
-    public class Signal<T> : ISignal
+    public class Signal<T> : BaseSignal<T>, ISignal
     {
-        public Delegate Listener
+        new public Delegate Listener
         {
             get
             {
@@ -197,7 +254,7 @@ namespace Inectio.Lite
             }
         }
 
-        public void RemoveAllListeners()
+        new public void RemoveAllListeners()
         {
             listener = null;
         }
@@ -206,6 +263,13 @@ namespace Inectio.Lite
         {
             if (listener != null)
                 listener(type);
+        }
+
+        public void DispatchToAll(T type)
+        {
+            if (listener != null)
+                listener(type);
+            base.Dispatch(type);
         }
 
         private Action<T> AddUnique(Action<T> listeners, Action<T> callback)
@@ -218,9 +282,9 @@ namespace Inectio.Lite
         }
     }
 
-    public class Signal<T, U> : ISignal
+    public class Signal<T, U> : BaseSignal<T, U>, ISignal
     {
-        public Delegate Listener
+        new public Delegate Listener
         {
             get
             {
@@ -258,6 +322,14 @@ namespace Inectio.Lite
             if (listener != null)
                 listener(type, type1);
         }
+
+        public void DispatchToAll(T type, U type2)
+        {
+            if (listener != null)
+                listener(type, type2);
+            base.Dispatch(type, type2);
+        }
+
 
         private Action<T, U> AddUnique(Action<T, U> listeners, Action<T, U> callback)
         {

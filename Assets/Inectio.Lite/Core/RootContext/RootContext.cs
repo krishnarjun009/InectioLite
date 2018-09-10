@@ -27,6 +27,12 @@ namespace Inectio.Lite
             
         }
 
+        virtual public void OnRemove()
+        {
+            commandBinder.OnRemove();
+            UnityEngine.Debug.Log("On removing is calling from context");
+        }
+
         private void initialize()
         {
             MapBindings();

@@ -59,7 +59,7 @@ namespace Inectio.Lite
             }
         }
 
-        private object getValue(Type type, object name)
+        private object getValue(Type type, string name)
         {
             return GetInstance(injectionBinder.GetBinding(type, name) as IInjectionBinding);
         }

@@ -10,15 +10,17 @@ namespace Inectio.Lite
         IInjectionBinding Map(Type key, object value);
         IInjectionBinding Map(Type type);
         IInjectionBinding GetBinding(Type key);
-        IInjectionBinding GetBinding(Type key, object name);
+        IInjectionBinding GetBinding(Type key, string name);
         void UnBind<T>();
+        void UnBind(Type key);
         object GetInstance(Type key);
-        object GetInstance(Type key, object name);
-        T GetInstance<T>(object name);
+        object GetInstance(Type key, string name);
+        T GetInstance<T>(string name);
         T GetInstance<T>();
         void TryToInject(object type);
         void ResolveBinding(IBinding binding);
         void RemoveView(IView view);
+        void OnRemove();
     }
 
     public class InjectionBinder : CoreBinder, IInjectionBinder
@@ -57,16 +59,21 @@ namespace Inectio.Lite
             return base.GetBinding(key) as IInjectionBinding;
         }
 
-        new public IInjectionBinding GetBinding(Type key, object name)
+        new public IInjectionBinding GetBinding(Type key, string name)
 		{
             return base.GetBinding(key, name) as IInjectionBinding;
 		}
 
         virtual public void UnBind<T>()
         {
-            if(bindings.ContainsKey(typeof(T)))
+            UnBind(typeof(T));
+        }
+
+        virtual public void UnBind(Type key)
+        {
+            if (bindings.ContainsKey(key))
             {
-                bindings.Remove(typeof(T));
+                bindings.Remove(key);
             }
         }
 
@@ -77,7 +84,7 @@ namespace Inectio.Lite
 
 		virtual public object GetInstance(Type key)
         {
-            return GetInstance(key, BindingNameType.NULL);
+            return GetInstance(key, "");
         }
 
         virtual public T GetInstance<T>()
@@ -85,7 +92,7 @@ namespace Inectio.Lite
             return (T)GetInstance(typeof(T), null);
         }
 
-        virtual public T GetInstance<T>(object name)
+        virtual public T GetInstance<T>(string name)
         {
             return (T)GetInstance(typeof(T), name);
         }
@@ -100,10 +107,15 @@ namespace Inectio.Lite
             injector.RemoveInjections(view);
         }
 
-        virtual public object GetInstance(Type key, object name)
+        virtual public object GetInstance(Type key, string name)
         {
             var binding = GetBinding(key, name);
             return injector.GetInstance(binding as IInjectionBinding);
+        }
+
+        virtual public void OnRemove()
+        {
+
         }
 
         protected override void resolver(IBinding binding)

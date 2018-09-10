@@ -6,11 +6,11 @@ namespace Inectio.Lite
     public interface ICommandBinding
     {
         ICommandBinding Map(Type key, object value);
-        ICommandBinding ToName(object name);
+        ICommandBinding ToName(string name);
         ICommandBinding Pooled();
         Type Key { get; }
         object Value { get; }
-        object Name { get; }
+        string Name { get; }
         bool IsPooled { get; }
     }
 
@@ -28,7 +28,7 @@ namespace Inectio.Lite
             return base.Map(key, value) as ICommandBinding;
 		}
 
-        new public ICommandBinding ToName(object name)
+        new public ICommandBinding ToName(string name)
         {
             return base.ToName(name) as ICommandBinding;
         }

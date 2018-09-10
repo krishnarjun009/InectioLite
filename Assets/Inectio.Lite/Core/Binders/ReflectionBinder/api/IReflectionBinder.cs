@@ -9,7 +9,7 @@ namespace Inectio.Lite
         IBinding Map(Type key, object value);
         IBinding Map(Type type);
         IBinding GetBinding(Type key);
-        IBinding GetBinding(Type key, object name);
+        IBinding GetBinding(Type key, string name);
         void ResolveBinding(IBinding binding);
         ReflectedItems Get(Type type);
     }
