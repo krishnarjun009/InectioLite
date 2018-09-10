@@ -6,24 +6,20 @@ namespace Inectio.Lite
     public class RootContext
     {
         private IInjectionBinder _injectionBinder;
+        private ICommandBinder _commandBinder;
         private static RootContext singletonContext;
 
         public static RootContext firstContext { get { return singletonContext; }}
         public IInjectionBinder injectionBinder { get { return _injectionBinder ?? (_injectionBinder = new InjectionBinder()); } }
-
-        //public IInectioCommandBinder _commandBinder;
-
-        //public IInectioCommandBinder commandBinder
-        //{
-        //    get { return _commandBinder ?? (_commandBinder = new InectioCommandBinder()); }
-        //}
+        public ICommandBinder commandBinder { get { return _commandBinder; } }
 
         public RootContext()
         {
             singletonContext = null;
             if (singletonContext == null)
                 singletonContext = this;
-            Initialize();
+            addCoreComponents();
+            initialize();
         }
 
         virtual public void MapBindings()
@@ -31,9 +27,15 @@ namespace Inectio.Lite
             
         }
 
-        private void Initialize()
+        private void initialize()
         {
             MapBindings();
+        }
+
+        private void addCoreComponents()
+        {
+            injectionBinder.Map<ICommandBinder, CommandBinder>();
+            _commandBinder = injectionBinder.GetInstance<ICommandBinder>();
         }
     }
 }

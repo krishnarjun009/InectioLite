@@ -17,6 +17,9 @@ namespace Inectio.Lite
             injectionBinder.Map<OnPlayerDiedSignal>();
             injectionBinder.Map<ISample, SampleData>();
 
+            commandBinder.Map<TestSignal, TestCommand>().Pooled();
+            commandBinder.Map<commandsignal, genericcommand>().Pooled();
+
 
             //Bouncy Ball Inections...
             injectionBinder.Map<LevelCompletedSignal>();
@@ -43,4 +46,21 @@ namespace Inectio.Lite
             UnityEngine.Debug.Log("Test Working");
         }
     }
+
+    public class commandsignal : Signal<int> { }
+    public class genericcommand : Command<int>
+    {
+		public override void Execute(int data)
+		{
+            UnityEngine.Debug.Log("Command is working as generic " + data);
+		}
+	}
+
+    public class TestCommand : Command
+    {
+		public override void Execute()
+		{
+            UnityEngine.Debug.Log("Command is working");
+		}
+	}
 }

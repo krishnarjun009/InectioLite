@@ -7,10 +7,11 @@ namespace Inectio.Lite
     {
         IInjectionBinding Map<TKey, TValue>();
         IInjectionBinding Map<TKey>();
-        IInjectionBinding Map(Type key, Type value);
+        IInjectionBinding Map(Type key, object value);
         IInjectionBinding Map(Type type);
         IInjectionBinding GetBinding(Type key);
         IInjectionBinding GetBinding(Type key, object name);
+        void UnBind<T>();
         object GetInstance(Type key);
         object GetInstance(Type key, object name);
         T GetInstance<T>(object name);
@@ -28,6 +29,7 @@ namespace Inectio.Lite
         {
             injector = new Injector();
             injector.injectionBinder = this;
+            Map(typeof(IInjectionBinder), this); // self inject...
         }
 
         new public IInjectionBinding Map<TKey, TValue>()
@@ -35,7 +37,7 @@ namespace Inectio.Lite
             return base.Map<TKey, TValue>() as IInjectionBinding;
         }
 
-        new public IInjectionBinding Map(Type key, Type value)
+        new public IInjectionBinding Map(Type key, object value)
         {
             return base.Map(key, value) as IInjectionBinding;
         }
@@ -59,6 +61,14 @@ namespace Inectio.Lite
 		{
             return base.GetBinding(key, name) as IInjectionBinding;
 		}
+
+        virtual public void UnBind<T>()
+        {
+            if(bindings.ContainsKey(typeof(T)))
+            {
+                bindings.Remove(typeof(T));
+            }
+        }
 
 		public override void ResolveBinding(IBinding binding)
         {

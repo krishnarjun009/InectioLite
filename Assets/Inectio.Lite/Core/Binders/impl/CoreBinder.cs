@@ -10,7 +10,7 @@ namespace Inectio.Lite
             NULL
         }
         
-        private readonly Dictionary<Type, Dictionary<object, IBinding>> bindings;
+        protected readonly Dictionary<Type, Dictionary<object, IBinding>> bindings;
         private readonly Dictionary<IBinding, object> conflicts;
 
         public delegate void Resolver(IBinding binding);

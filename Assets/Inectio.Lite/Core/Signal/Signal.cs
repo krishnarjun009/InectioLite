@@ -9,35 +9,109 @@ namespace Inectio.Lite
         void RemoveAllListeners();
     }
 
-    public class BaseSignal
+    public interface IBaseSignal
     {
-        private event Action listener;
+        Delegate Listener { get; set; }
+        void RemoveAllListeners();
+    }
+
+    public interface IGenericCommand
+    {
+        int GenericValue { get; }
+    }
+
+    public class BaseSignal : IGenericCommand, IBaseSignal
+    {
+        private event Action commandListener;
+
+        public int GenericValue { get { return 0; }}
+
+        public Delegate Listener
+        {
+            get
+            {
+                return commandListener ?? (commandListener = delegate { });
+            }
+            set
+            {
+                commandListener = (Action)value;
+            }
+        }
 
         public virtual void AddListener(Action callback)
         {
-            listener = Add(listener, callback);
+            commandListener = Add(commandListener, callback);
+        }
+
+        public virtual void RemoveListener(Action callback)
+        {
+            if (commandListener != null || commandListener.GetInvocationList().Contains(callback))
+            {
+                commandListener -= callback;
+            }
         }
 
         public virtual void Dispatch()
         {
-            if (listener != null)
-                listener();
+            if (commandListener != null)
+                commandListener();
         }
 
-        private Action Add(Action listener, Action action)
+        private Action Add(Action _listener, Action action)
         {
-            if(listener == null || !listener.GetInvocationList().Contains(action))
+            if(_listener == null || !_listener.GetInvocationList().Contains(action))
             {
-                listener += action;
+                _listener += action;
             }
 
-            return listener;
+            return _listener;
+        }
+
+        public void RemoveAllListeners()
+        {
+            throw new NotImplementedException();
         }
     }
 
-    public class Signal : ISignal
+    public class BaseSignal<T> : IGenericCommand
     {
-        public Delegate Listener
+        private event Action<T> commandListener;
+
+        public int GenericValue { get { return 1; } }
+
+        public virtual void AddListener(Action<T> callback)
+        {
+            commandListener = Add(commandListener, callback);
+        }
+
+        public virtual void RemoveListener(Action<T> callback)
+        {
+            if (commandListener != null || commandListener.GetInvocationList().Contains(callback))
+            {
+                commandListener -= callback;
+            }
+        }
+
+        public virtual void Dispatch(T type)
+        {
+            if (commandListener != null)
+                commandListener(type);
+        }
+
+        private Action<T> Add(Action<T> _listener, Action<T> action)
+        {
+            if (_listener == null || !_listener.GetInvocationList().Contains(action))
+            {
+                _listener += action;
+            }
+
+            return _listener;
+        }
+    }
+
+    public class Signal : BaseSignal, ISignal
+    {
+        new public Delegate Listener
         {
             get
             {
@@ -51,12 +125,12 @@ namespace Inectio.Lite
 
         private event Action listener;
 
-        public void AddListener(Action callback)
+        public override void AddListener(Action callback)
         {
             listener = AddUnique(listener, callback);
         }
 
-        public void RemoveListener(Action callback)
+        public override void RemoveListener(Action callback)
         {
             if (callback != null && listener.GetInvocationList().Contains(callback))
             {
@@ -70,10 +144,17 @@ namespace Inectio.Lite
             listener = null;
         }
 
-        public void Dispatch()
+        public override void Dispatch()
         {
             if (listener != null)
                 listener();
+        }
+
+        public void DispatchToAll()
+        {
+            if (listener != null)
+                listener();
+            base.Dispatch();
         }
 
         private Action AddUnique(Action listeners, Action callback)

@@ -20,6 +20,22 @@ namespace Inectio.Lite
             throw new InectioException("InjectorFactory can't instantiate an Interface or Abstract Class or Primitive. Class: " + key.ToString());
         }
 
+        public object CreateInstance(object value)
+        {
+            if (value != null)
+            {
+                if (value.GetType().IsInstanceOfType(typeof(Type)))
+                {
+                    object o = CreateFromValue(value, null);
+                    if (o == null)
+                        return null;
+                    return o;
+                }
+            }
+
+            return GetImplicitly(value, null);
+        }
+
         private object InstanceOf(IInjectionBinding binding)
         {
             if (binding == null)

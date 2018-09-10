@@ -8,6 +8,7 @@ namespace Sample
     {
         [Inject] private SampleData data { get; set; }
         [Inject] private TestSignal testSignal;
+        [Inject] private commandsignal commandsignal { get; set; }
 
         protected override void Awake()
 		{
@@ -22,9 +23,15 @@ namespace Sample
             //c.testSignal.Dispatch();
 		}
 
+        IAsTest asTest = new asTest();
+        public bool enableDebug = false;
 		private void Update()
 		{
-            testSignal.Dispatch();
+            commandsignal.Dispatch(5);
+            //testSignal.Dispatch();
+            var test = asTest as asTest;
+            if(enableDebug)
+                test.Print();
 		}
 
 		//[Inject]
@@ -35,4 +42,22 @@ namespace Sample
             Debug.Log("------");
         }
 	}
+
+    public interface IAsTest
+    {
+        
+    }
+
+    public class asTest : IAsTest
+    {
+        public void Print()
+        {
+            Debug.Log("As Test");
+        }
+    }
+
+    public class asTest1 : IAsTest
+    {
+        
+    }
 }

@@ -15,7 +15,6 @@ namespace com.bonucyballs.inectio
         {
             Destroy(currentLevelInstance);
             currentLevelInstance = null;
-            gameData.SaveCurrentLevel();
             currentLevelInstance = GetLevel(gameData.Level);
             gameStartNotifierSignal.Dispatch(gameData.Level);
         }
@@ -45,6 +44,7 @@ namespace com.bonucyballs.inectio
         [Listen(typeof(LevelCompletedSignal))]
         private void OnLevelCompleted()
         {
+            gameData.SaveCurrentLevel();
             Destroy(currentLevelInstance);
             currentLevelInstance = null;
         }
