@@ -36,9 +36,11 @@ CommandBinder where you can Map Signal to Command. When signal will dispatch Com
 Signal and Command mapping is One - One Mapping means one signal binds with one command of the whole game life time. You can't bind more than one command to the same signal.
 
   - Syntax:
+  ```
           commandBinder.Map<TestSignal, TestCommand>();
           commandBinder.Map<UpdatePlayerDataSignal, UpdatePlayerDataCommand>().Pooled();
           commandBinder.Map<TestSignal, AnotherTestCommand>(); (this will gives an exception ).
+  ```
          
 If you are using CommandFrequently in Update() or any loop, Make it to Pooled(). Otherwise this will give GC as per object size. Pooled() Commands are GC Free.
 
@@ -50,13 +52,16 @@ InectioBootStrap is required for initalize RootContext and it is Monobehaviour. 
 Signals are event delegates. Signals are core system in any DI framework. It will communicate multiple objects when someting is happen in the game.
 
    - Syntax:
+   ```
          public class TestSignal : Signal { }
          public class UpdatePlayerDataSignal : Signal<int, float, string> { }
+   ```
          
 # Commands
 Commands are useful to update game data or Make Server Api's calls from command to service. I recommended use commands for updattion or api calls. You have to override the execute method. Command Parameters should match with signal parameters. Otherwise it will an exception says, "method arguments are Invalid".
 
    - Syntax:
+   ```
           public class TestCommand : Command
           {
               public override void Execute()
@@ -72,6 +77,7 @@ Commands are useful to update game data or Make Server Api's calls from command 
 
              }
          }
+   ```
 
 
 
