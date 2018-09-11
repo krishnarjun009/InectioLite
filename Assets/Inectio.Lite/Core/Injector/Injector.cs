@@ -18,9 +18,7 @@ namespace Inectio.Lite
 
         public object GetInstance(IInjectionBinding binding)
         {
-            var obj = injectionFactory.GetInstance(binding);
-            Inject(obj);
-            return obj;
+            return injectionFactory.GetInstance(binding);
         }
 
         public object GetInstance(object value)

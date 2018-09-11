@@ -7,21 +7,22 @@ namespace Sample
     public class SampleView : View
     {
         [Inject] private SampleData data { get; set; }
-        [Inject] private TestSignal testSignal;
+        //Inject] private TestSignal testSignal;
         [Inject] private commandsignal commandsignal { get; set; }
+        [Inject] private commandsignal2 commandsignal2 { get; set; }
         //[Inject("another")] private commandsignal commandsignal11 { get; set; }
-        [Inject] private commandsignal1 commandsignal1 { get; set; }
+        //[Inject] private commandsignal1 commandsignal1 { get; set; }
 
         protected override void Awake()
 		{
             base.Awake();       
             data.Print();
-            testSignal.Dispatch();
+            //testSignal.Dispatch();
 
-            Debug.Log("Creating gameobject");
-            GameObject go = new GameObject();
-            var c = go.AddComponent<SampleView1>();
-            go.transform.SetParent(transform, false);
+            //Debug.Log("Creating gameobject");
+            //GameObject go = new GameObject();
+            //var c = go.AddComponent<SampleView1>();
+            //go.transform.SetParent(transform, false);
             //c.testSignal.Dispatch();
 		}
 
@@ -29,7 +30,8 @@ namespace Sample
         public bool enableDebug = false;
 		private void Update()
 		{
-            commandsignal.Dispatch(5, "krishna");
+            commandsignal.Dispatch(4,6, "Hello", 9);
+            commandsignal2.Dispatch(4, 6, "Krishna", 9);
             //commandsignal11.DispatchToAll(1, "another");
             //commandsignal1.DispatchToAll(10, "anji1");
             //testSignal.DispatchToAll();
@@ -46,11 +48,11 @@ namespace Sample
             Debug.Log("------");
         }
 
-        [Listen(typeof(commandsignal))]
-        private void both(int i, string str)
-        {
-            Debug.Log("both " + str);
-        }
+        //[Listen(typeof(commandsignal))]
+        //private void both(int i)
+        //{
+        //    //Debug.Log("both " + str);
+        //}
 	}
 
     public interface IAsTest

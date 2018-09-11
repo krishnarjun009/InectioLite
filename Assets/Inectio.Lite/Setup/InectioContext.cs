@@ -19,8 +19,9 @@ namespace Inectio.Lite
 
             commandBinder.Map<TestSignal, TestCommand>().Pooled();
             commandBinder.Map<commandsignal, genericcommand>().Pooled();
+            commandBinder.Map<commandsignal2, genericcommand>().Pooled();
             //commandBinder.Map<commandsignal, genericcommand1>().ToName("another").Pooled();
-            commandBinder.Map<commandsignal1, genericcommand>().Pooled();
+            //commandBinder.Map<commandsignal1, genericcommand>().Pooled();
 
             //Bouncy Ball Inections...
             //injectionBinder.Map<LevelCompletedSignal>();
@@ -48,13 +49,17 @@ namespace Inectio.Lite
         }
     }
 
-    public class commandsignal : Signal<int, string> { }
+    public class commandsignal : Signal<int, int, string, int> { }
     public class commandsignal1 : Signal<int, string> { }
-    public class genericcommand : Command<int, string>
+    public class commandsignal2 : Signal<int, int, string, int> { }
+    public class genericcommand : Command<int, int, string, int>
     {
-		public override void Execute(int data, string str)
+        [Inject] private TestSignal testSignal { get; set; }
+
+		public override void Execute(int type1, int type2, string type3, int type4)
 		{
-            UnityEngine.Debug.Log("Command is working as generic " + str);
+            //UnityEngine.Debug.Log("Command - type3 data: " + type3);
+            //testSignal.Dispatch();
 		}
 	}
 
@@ -70,7 +75,7 @@ namespace Inectio.Lite
     {
 		public override void Execute()
 		{
-            //UnityEngine.Debug.Log("Command is working");
+            UnityEngine.Debug.Log("Command is working");
 		}
 	}
 }

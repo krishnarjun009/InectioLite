@@ -42,6 +42,7 @@ namespace Inectio.Lite
         {
             injectionBinder.Map<ICommandBinder, CommandBinder>();
             _commandBinder = injectionBinder.GetInstance<ICommandBinder>();
+            injectionBinder.TryToInject(_commandBinder);
         }
     }
 }

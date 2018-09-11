@@ -8,9 +8,9 @@ namespace Inectio.Lite
     public interface ICommandBinder
     {
         ICommandBinding Map<TKey, TValue>();
-        ICommandBinding Map<TKey>();
+        //ICommandBinding Map<TKey>();
         ICommandBinding Map(Type key, object value);
-        ICommandBinding Map(Type type);
+        //ICommandBinding Map(Type type);
         ICommandBinding GetBinding(Type key);
         ICommandBinding GetBinding(Type key, string name);
         //object GetInstance(Type key);
@@ -26,10 +26,22 @@ namespace Inectio.Lite
         [Inject] private IInjectionBinder injectionBinder { get; set; }
 
         private readonly Dictionary<Type, ICommand> poolDict;
+        private readonly MethodInfo methodZero, methodOne, methodTwo, methodThree, methodFour; // caching method references.
+        BindingFlags flags = BindingFlags.FlattenHierarchy |
+                         BindingFlags.SetProperty |
+                         BindingFlags.Public |
+                         BindingFlags.NonPublic |
+                         BindingFlags.Instance;
 
         public CommandBinder()
         {
             poolDict = new Dictionary<Type, ICommand>();
+            var gtype = this.GetType();
+            methodZero = gtype.GetMethod("GenericCommandZero", flags);
+            methodOne = gtype.GetMethod("GenericCommandOne", flags);
+            methodTwo = gtype.GetMethod("GenericCommandTwo", flags);
+            methodThree = gtype.GetMethod("GenericCommandThree", flags);
+            methodFour = gtype.GetMethod("GenericCommandFour", flags);
         }
 
         new public ICommandBinding Map<TKey, TValue>()
@@ -45,7 +57,7 @@ namespace Inectio.Lite
                 //lets create one...
                 injectionBinder.Map(key);
             }
-            if(bindings.ContainsKey(key))
+            if(bindings.ContainsKey(key)) // SUPPORT ME FOR MULTIPLE COMMAND BINDINGS FOR SAME SIGNAL...
             {
                 throw new InectioException(key + " type has already command mapping");
             }
@@ -111,13 +123,15 @@ namespace Inectio.Lite
 
         virtual public void OnRemove()
         {
-            //UnityEngine.Debug.Log("OnRemove from command binder");
             foreach(var binding in bindings)
             {
                 var method = getGenericMethod(binding.Key);
                 var b = injectionBinder.GetBinding(binding.Key);
                 RemoveDelegate(this, b.Value as IBaseSignal, method);
             }
+
+            bindings.Clear();
+            poolDict.Clear();
         }
 
         protected override void resolver(IBinding binding)
@@ -154,10 +168,11 @@ namespace Inectio.Lite
             (command as Command<T, U, V>).Execute(type1, type2, type3);
         }
 
-        private void GenericCommandFour<T, U, V, W>(IBaseSignal signal, T type1, U type2, V type3, W type4)
+        private void GenericCommandFour<T, U, V, W>(IBaseSignal signal)
         {
             var command = getCommand(signal.GetType());
-            (command as Command<T, U, V, W>).Execute(type1, type2, type3, type4);
+            var bs = signal as BaseSignal<T, U, V, W>; // exception case
+            (command as Command<T, U, V, W>).Execute(bs.Type1, bs.Type2, bs.Type3, bs.Type4);
         }
 
         protected ICommand getCommand(Type key)
@@ -172,6 +187,7 @@ namespace Inectio.Lite
                     Type value = (o is Type) ? o as Type : o.GetType();
                     //Console.WriteLine("Creating instacne of " + value);
                     var c = Activator.CreateInstance(value, null) as ICommand;
+                    injectionBinder.TryToInject(c);
                     poolDict[key] = c;
                 }
 
@@ -180,9 +196,14 @@ namespace Inectio.Lite
             }
 
             //make sure if you have command usage prequently, better to make it as pooled() to stay away from GC
-            injectionBinder.Map(typeof(ICommand), binding.Value);
-            var command = injectionBinder.GetInstance(typeof(ICommand));
-            injectionBinder.UnBind(key);
+            var cmdb = injectionBinder.GetBinding(typeof(ICommand));
+            if(cmdb == null)
+            {
+                cmdb = injectionBinder.Map(typeof(ICommand), binding.Value).ToMultiple();
+            }
+
+            var command = injectionBinder.GetInstance(cmdb);
+            injectionBinder.TryToInject(command);
             return command as ICommand;
         }
 
@@ -225,12 +246,6 @@ namespace Inectio.Lite
         {
             var binding = GetBinding(key);
             var type = binding.Key.BaseType;
-            var gtype = this.GetType();
-            var flags =  BindingFlags.FlattenHierarchy |
-                         BindingFlags.SetProperty |
-                         BindingFlags.Public |
-                         BindingFlags.NonPublic |
-                         BindingFlags.Instance;
             if (type.IsGenericType)
             {
                 var gParams = type.GetGenericArguments();
@@ -238,17 +253,17 @@ namespace Inectio.Lite
                 switch (gParams.Length)
                 {
                     case 1:
-                        return gtype.GetMethod("GenericCommandOne", flags).MakeGenericMethod(gParams);
+                        return methodOne.MakeGenericMethod(gParams);
                     case 2:
-                        return gtype.GetMethod("GenericCommandTwo", flags).MakeGenericMethod(gParams);
+                        return methodTwo.MakeGenericMethod(gParams);
                     case 3:
-                        return gtype.GetMethod("GenericCommandThree", flags).MakeGenericMethod(gParams);
+                        return methodThree.MakeGenericMethod(gParams);
                     case 4:
-                        return gtype.GetMethod("GenericCommandFour", flags).MakeGenericMethod(gParams);
+                        return methodFour.MakeGenericMethod(gParams);
                 }
             }
 
-            return gtype.GetMethod("GenericCommandZero", flags);
+            return methodZero;
         }
     }
 }

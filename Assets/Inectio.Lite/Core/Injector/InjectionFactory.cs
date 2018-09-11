@@ -46,8 +46,10 @@ namespace Inectio.Lite
                 if (CheckForAssignee(binding.Key, binding.Value))
                 {
                     //its fine...
+
                     if (binding.Value.GetType().IsInstanceOfType(typeof(Type)))
                     {
+                        //UnityEngine.Debug.Log("Instance ");
                         object o = CreateFromValue(binding.Value, null);
                         if (o == null)
                             return null;

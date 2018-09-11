@@ -15,6 +15,7 @@ namespace Inectio.Lite
         void UnBind(Type key);
         object GetInstance(Type key);
         object GetInstance(Type key, string name);
+        object GetInstance(IInjectionBinding binding);
         T GetInstance<T>(string name);
         T GetInstance<T>();
         void TryToInject(object type);
@@ -111,6 +112,11 @@ namespace Inectio.Lite
         {
             var binding = GetBinding(key, name);
             return injector.GetInstance(binding as IInjectionBinding);
+        }
+
+        virtual public object GetInstance(IInjectionBinding binding)
+        {
+            return injector.GetInstance(binding);
         }
 
         virtual public void OnRemove()
