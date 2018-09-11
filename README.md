@@ -36,7 +36,7 @@ CommandBinder where you can Map Signal to Command. When signal will dispatch Com
 Signal and Command mapping is One - One Mapping means one signal binds with one command of the whole game life time. You can't bind more than one command to the same signal.
 
   - Syntax:
-  ```
+  ``` C#
           commandBinder.Map<TestSignal, TestCommand>();
           commandBinder.Map<UpdatePlayerDataSignal, UpdatePlayerDataCommand>().Pooled();
           commandBinder.Map<TestSignal, AnotherTestCommand>(); (this will gives an exception ).
