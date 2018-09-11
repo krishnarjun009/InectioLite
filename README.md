@@ -24,11 +24,13 @@ Core Features:
 InjectionBinder where you can Map all your dependecy objects like data models, signals or etc. This is Core binder and controlls other binders. for EX: CommandBinder.
 
   - Syntax: 
+  ``` C#
          injectionBinder.Map<SampleData>();
          injectionBinder.Map<TestSignal>();
          injectionBinder.Map<JumpInputSignal>();
          injectionBinder.Map<OnPlayerDiedSignal>();
          injectionBinder.Map<ISample, SampleData>();
+  ```
          
 
 CommandBinder where you can Map Signal to Command. When signal will dispatch Command Execute method will run. Commands are generic type, so you can specify the data types in generic way. Since Generics will support max 4 parameters inside. So you can use class or struct object.
@@ -39,7 +41,7 @@ Signal and Command mapping is One - One Mapping means one signal binds with one 
   ``` C#
           commandBinder.Map<TestSignal, TestCommand>();
           commandBinder.Map<UpdatePlayerDataSignal, UpdatePlayerDataCommand>().Pooled();
-          commandBinder.Map<TestSignal, AnotherTestCommand>(); (this will gives an exception ).
+          commandBinder.Map<TestSignal, AnotherTestCommand>(); //(this will gives an exception ).
   ```
          
 If you are using CommandFrequently in Update() or any loop, Make it to Pooled(). Otherwise this will give GC as per object size. Pooled() Commands are GC Free.
@@ -52,7 +54,7 @@ InectioBootStrap is required for initalize RootContext and it is Monobehaviour. 
 Signals are event delegates. Signals are core system in any DI framework. It will communicate multiple objects when someting is happen in the game.
 
    - Syntax:
-   ```
+   ``` C#
          public class TestSignal : Signal { }
          public class UpdatePlayerDataSignal : Signal<int, float, string> { }
    ```
@@ -61,7 +63,7 @@ Signals are event delegates. Signals are core system in any DI framework. It wil
 Commands are useful to update game data or Make Server Api's calls from command to service. I recommended use commands for updattion or api calls. You have to override the execute method. Command Parameters should match with signal parameters. Otherwise it will an exception says, "method arguments are Invalid".
 
    - Syntax:
-   ```
+   ``` C#
           public class TestCommand : Command
           {
               public override void Execute()
