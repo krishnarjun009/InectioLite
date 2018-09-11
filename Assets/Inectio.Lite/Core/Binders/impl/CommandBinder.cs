@@ -13,10 +13,10 @@ namespace Inectio.Lite
         ICommandBinding Map(Type type);
         ICommandBinding GetBinding(Type key);
         ICommandBinding GetBinding(Type key, string name);
-        object GetInstance(Type key);
-        object GetInstance(Type key, string name);
-        T GetInstance<T>(string name);
-        T GetInstance<T>();
+        //object GetInstance(Type key);
+        //object GetInstance(Type key, string name);
+        //T GetInstance<T>(string name);
+        //T GetInstance<T>();
         void ResolveBinding(IBinding binding);
         void OnRemove();
     }
@@ -44,6 +44,10 @@ namespace Inectio.Lite
             {
                 //lets create one...
                 injectionBinder.Map(key);
+            }
+            if(bindings.ContainsKey(key))
+            {
+                throw new InectioException(key + " type has already command mapping");
             }
 
             return base.Map(key, value) as ICommandBinding;
@@ -78,6 +82,7 @@ namespace Inectio.Lite
                 var method = getGenericMethod(binding.Key);
                 var b = injectionBinder.GetBinding(binding.Key);
                 var signal = injectionBinder.GetInstance(binding.Key) as IBaseSignal;
+                RemoveDelegate(this, signal, method);
                 AddDelegate(this, signal, method);
             }
         }
@@ -106,13 +111,12 @@ namespace Inectio.Lite
 
         virtual public void OnRemove()
         {
-            UnityEngine.Debug.Log("OnRemove from command binder");
+            //UnityEngine.Debug.Log("OnRemove from command binder");
             foreach(var binding in bindings)
             {
                 var method = getGenericMethod(binding.Key);
                 var b = injectionBinder.GetBinding(binding.Key);
-                var signal = b.Value as ISignal;
-                RemoveDelegate(this, signal as IBaseSignal, method);
+                RemoveDelegate(this, b.Value as IBaseSignal, method);
             }
         }
 
@@ -188,7 +192,7 @@ namespace Inectio.Lite
             //UnityEngine.Debug.Log("Adding delegate to " + target);
             if (signal.GetType().BaseType.IsGenericType)
             {
-                //UnityEngine.Debug.Log("adding delegate to " + signal);
+                //UnityEngine.Debug.Log("adding delegate from command " + signal);
                 var toAdd = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Combine(signal.Listener, toAdd);
             }
@@ -212,7 +216,6 @@ namespace Inectio.Lite
             else
             {
                 //UnityEngine.Debug.Log("removing delegate to " + signal);
-                //UnityEngine.Debug.Log("Removing Listener " + method.Name);
                 var s = signal as BaseSignal;
                 s.RemoveListener((Action<IBaseSignal>)Delegate.CreateDelegate(typeof(Action<IBaseSignal>), target, method));
             }
@@ -220,37 +223,32 @@ namespace Inectio.Lite
 
         private MethodInfo getGenericMethod(Type key)
         {
-            MethodInfo method = null;
-            ICommandBinding binding = GetBinding(key);
+            var binding = GetBinding(key);
             var type = binding.Key.BaseType;
+            var gtype = this.GetType();
+            var flags =  BindingFlags.FlattenHierarchy |
+                         BindingFlags.SetProperty |
+                         BindingFlags.Public |
+                         BindingFlags.NonPublic |
+                         BindingFlags.Instance;
             if (type.IsGenericType)
             {
                 var gParams = type.GetGenericArguments();
-                var signal = injectionBinder.GetInstance(binding.Key);;
-                BindingFlags flags = BindingFlags.FlattenHierarchy |
-                                                             BindingFlags.SetProperty |
-                                                             BindingFlags.Public |
-                                                             BindingFlags.NonPublic |
-                                                             BindingFlags.Instance;
+                var signal = injectionBinder.GetInstance(binding.Key);
                 switch (gParams.Length)
                 {
                     case 1:
-                        method = this.GetType().GetMethod("GenericCommandOne", flags);
-                        break;
+                        return gtype.GetMethod("GenericCommandOne", flags).MakeGenericMethod(gParams);
                     case 2:
-                        method = this.GetType().GetMethod("GenericCommandTwo", flags);
-                        break;
+                        return gtype.GetMethod("GenericCommandTwo", flags).MakeGenericMethod(gParams);
                     case 3:
-                        method = this.GetType().GetMethod("GenericCommandThree", flags);
-                        break;
+                        return gtype.GetMethod("GenericCommandThree", flags).MakeGenericMethod(gParams);
                     case 4:
-                        method = this.GetType().GetMethod("GenericCommandFour", flags);
-                        break;
+                        return gtype.GetMethod("GenericCommandFour", flags).MakeGenericMethod(gParams);
                 }
-
-                return method.MakeGenericMethod(gParams);
             }
-            return method;
+
+            return gtype.GetMethod("GenericCommandZero", flags);
         }
     }
 }

@@ -129,12 +129,9 @@ namespace Inectio.Lite
                     if(methodAttributes == null)
                     {
                         methodAttributes = new MethodAttributes(method, null, method.DeclaringType, null);
-                        methodAttributes.methodListenType = (listeners[0] as Listen).type;
+                        //methodAttributes.methodListenType = (listeners[0] as Listen).type;
                     }
-                    else
-                    {
-                        methodAttributes.methodListenType = (listeners[0] as Listen).type;
-                    }
+                    methodAttributes.methodListenType = (listeners[0] as Listen).type;
                 }
 
                 if (methodAttributes != null)

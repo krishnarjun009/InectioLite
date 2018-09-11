@@ -37,7 +37,7 @@ namespace Inectio.Lite
 
         public virtual void RemoveListener(Action<IBaseSignal> callback)
         {
-            if (commandListener != null || commandListener.GetInvocationList().Contains(callback))
+            if (commandListener != null && commandListener.GetInvocationList().Contains(callback))
             {
                 commandListener -= callback;
             }
@@ -87,7 +87,7 @@ namespace Inectio.Lite
 
         public virtual void RemoveListener(Action<IBaseSignal, T> callback)
         {
-            if (commandListener != null || commandListener.GetInvocationList().Contains(callback))
+            if (commandListener != null && commandListener.GetInvocationList().Contains(callback))
             {
                 commandListener -= callback;
             }
@@ -138,7 +138,7 @@ namespace Inectio.Lite
 
         public virtual void RemoveListener(Action<IBaseSignal, T, U> callback)
         {
-            if (commandListener != null || commandListener.GetInvocationList().Contains(callback))
+            if (commandListener != null && commandListener.GetInvocationList().Contains(callback))
             {
                 commandListener -= callback;
             }
@@ -312,24 +312,17 @@ namespace Inectio.Lite
             }
         }
 
-        public void RemoveAllListeners()
+        new public void RemoveAllListeners()
         {
             listener = null;
         }
 
-        public void Dispatch(T type, U type1)
-        {
-            if (listener != null)
-                listener(type, type1);
-        }
-
-        public void DispatchToAll(T type, U type2)
+        public override void Dispatch(T type, U type2)
         {
             if (listener != null)
                 listener(type, type2);
             base.Dispatch(type, type2);
         }
-
 
         private Action<T, U> AddUnique(Action<T, U> listeners, Action<T, U> callback)
         {

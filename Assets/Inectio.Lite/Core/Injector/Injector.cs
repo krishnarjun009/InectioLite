@@ -109,7 +109,7 @@ namespace Inectio.Lite
                         //UnityEngine.Debug.Log("Creating delegate here " + method.methodListenType);
                         var binding = injectionBinder.GetBinding(method.methodListenType);
                         var obj = GetInstance(binding) as ISignal;
-                        UnityEngine.Debug.Log("Siganl " + obj);
+                        //UnityEngine.Debug.Log("Siganl " + obj);
                         if(obj != null)
                             AddDelegate(target, obj, method.info);
                     }
@@ -122,7 +122,7 @@ namespace Inectio.Lite
         {
             if (signal.GetType().BaseType.IsGenericType)
             {
-                //UnityEngine.Debug.Log("Adding delegate to " + target);
+                UnityEngine.Debug.Log("Adding delegate to " + target);
                 var toAdd = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Combine(signal.Listener, toAdd);
             }

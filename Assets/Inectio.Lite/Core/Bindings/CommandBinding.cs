@@ -6,7 +6,7 @@ namespace Inectio.Lite
     public interface ICommandBinding
     {
         ICommandBinding Map(Type key, object value);
-        ICommandBinding ToName(string name);
+        //ICommandBinding ToName(string name);
         ICommandBinding Pooled();
         Type Key { get; }
         object Value { get; }

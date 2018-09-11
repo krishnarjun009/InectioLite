@@ -89,9 +89,10 @@ namespace Inectio.Lite
             }
 
             //Remove nulloid bindings
-            if (values.ContainsKey("") && values[""].Equals(binding))
+            if (values.ContainsKey(name) && values[name].Equals(binding))
             {
-                values.Remove("");
+                //UnityEngine.Debug.Log("Removing binding " + binding.Key);
+                values.Remove(name);
             }
 
             //do not add duplicate bindings...
