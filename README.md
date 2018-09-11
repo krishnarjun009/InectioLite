@@ -36,9 +36,9 @@ CommandBinder where you can Map Signal to Command. When signal will dispatch Com
 Signal and Command mapping is One - One Mapping means one signal binds with one command of the whole game life time. You can't bind more than one command to the same signal.
 
   - Syntax:
-         commandBinder.Map<TestSignal, TestCommand>();
-         commandBinder.Map<UpdatePlayerDataSignal, UpdatePlayerDataCommand>().Pooled();
-         commandBinder.Map<TestSignal, AnotherTestCommand>(); ( this will gives an exception ).
+          commandBinder.Map<TestSignal, TestCommand>();
+          commandBinder.Map<UpdatePlayerDataSignal, UpdatePlayerDataCommand>().Pooled();
+          commandBinder.Map<TestSignal, AnotherTestCommand>(); (this will gives an exception ).
          
 If you are using CommandFrequently in Update() or any loop, Make it to Pooled(). Otherwise this will give GC as per object size. Pooled() Commands are GC Free.
 
@@ -57,19 +57,19 @@ Signals are event delegates. Signals are core system in any DI framework. It wil
 Commands are useful to update game data or Make Server Api's calls from command to service. I recommended use commands for updattion or api calls. You have to override the execute method. Command Parameters should match with signal parameters. Otherwise it will an exception says, "method arguments are Invalid".
 
    - Syntax:
-         public class TestCommand : Command
-         {
-             public override void Execute()
-             {
-               
-             }
-         }
-         
+          public class TestCommand : Command
+          {
+              public override void Execute()
+              {
+
+              }
+          }
+
          public class UpdatePlayerDataCommand : Command<int, float, string>
          {
              public override void Execute(int value, float flt, string str)
              {
-                 
+
              }
          }
 
