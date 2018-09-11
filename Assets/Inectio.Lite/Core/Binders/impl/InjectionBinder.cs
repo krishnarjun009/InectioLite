@@ -20,8 +20,7 @@ namespace Inectio.Lite
         T GetInstance<T>();
         void TryToInject(object type);
         void ResolveBinding(IBinding binding);
-        void RemoveView(IView view);
-        void OnRemove();
+        void OnRemove(IView view);
     }
 
     public class InjectionBinder : CoreBinder, IInjectionBinder
@@ -103,9 +102,9 @@ namespace Inectio.Lite
             injector.Inject(type);
         }
 
-        virtual public void RemoveView(IView view)
+        virtual public void OnRemove(IView view)
         {
-            injector.RemoveInjections(view);
+            injector.OnRemove(view);
         }
 
         virtual public object GetInstance(Type key, string name)
@@ -117,11 +116,6 @@ namespace Inectio.Lite
         virtual public object GetInstance(IInjectionBinding binding)
         {
             return injector.GetInstance(binding);
-        }
-
-        virtual public void OnRemove()
-        {
-
         }
 
         protected override void resolver(IBinding binding)

@@ -35,7 +35,7 @@ namespace Inectio.Lite
             injectMethods(reflected.methods, target);
         }
 
-        public void RemoveInjections(object target)
+        public void OnRemove(object target)
         {
             var rBinder = reflectionBinder.GetBinding(target.GetType());
             if(rBinder != null)
@@ -120,7 +120,7 @@ namespace Inectio.Lite
         {
             if (signal.GetType().BaseType.IsGenericType)
             {
-                UnityEngine.Debug.Log("Adding delegate to " + target);
+                //UnityEngine.Debug.Log("Adding delegate to " + target);
                 var toAdd = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Combine(signal.Listener, toAdd);
             }
@@ -136,6 +136,7 @@ namespace Inectio.Lite
         {
             if (signal.GetType().BaseType.IsGenericType)
             {
+                //UnityEngine.Debug.Log("Removing Listener " + method.Name);
                 Delegate toRemove = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Remove(signal.Listener, toRemove);
             }

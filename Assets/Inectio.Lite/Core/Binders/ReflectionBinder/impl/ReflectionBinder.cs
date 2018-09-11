@@ -163,19 +163,5 @@ namespace Inectio.Lite
 
             return new MethodAttributes(method, attr.name, method.DeclaringType, parmAttributes);
         }
-
-        ///// Remove any existing ListensTo Delegates
-        //protected void RemoveDelegate(object mediator, Signal signal, MethodInfo method)
-        //{
-        //    if (signal.GetType().BaseType.IsGenericType) //e.g. Signal<T>, Signal<T,U> etc.
-        //    {
-        //        Delegate toRemove = Delegate.CreateDelegate(signal.listener.GetType(), mediator, method);
-        //        signal.listener = Delegate.Remove(signal.listener, toRemove);
-        //    }
-        //    else
-        //    {
-        //        ((Signal)signal).RemoveListener((Action)Delegate.CreateDelegate(typeof(Action), mediator, method)); //Assign and cast explicitly for Type == Signal case
-        //    }
-        //}
     }
 }

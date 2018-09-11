@@ -48,11 +48,11 @@ namespace Sample
             Debug.Log("------");
         }
 
-        //[Listen(typeof(commandsignal))]
-        //private void both(int i)
-        //{
-        //    //Debug.Log("both " + str);
-        //}
+        [Listen(typeof(commandsignal))]
+        private void both(int i, int j, string k, int l)
+        {
+            //Debug.Log("both " + str);
+        }
 	}
 
     public interface IAsTest

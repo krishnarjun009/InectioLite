@@ -34,13 +34,13 @@ namespace Inectio.Lite
         }
 
         /// <summary>
-        /// base destroy is mandetary to call before your code.
+        /// base destroy is mandetary to call before your code to clean up.
         /// </summary>
         protected virtual void OnDestroy()
         {
             OnRemove();
             var context = RootContext.firstContext;
-            context.injectionBinder.RemoveView(this);
+            context.injectionBinder.OnRemove(this);
         }
     }
 }
