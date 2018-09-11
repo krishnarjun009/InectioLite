@@ -18,11 +18,10 @@ namespace Inectio.Lite
             singletonContext = null;
             if (singletonContext == null)
                 singletonContext = this;
-            addCoreComponents();
             initialize();
         }
 
-        virtual public void MapBindings()
+        virtual public void mapBindings()
         {
             
         }
@@ -30,19 +29,22 @@ namespace Inectio.Lite
         virtual public void OnRemove()
         {
             commandBinder.OnRemove();
-            UnityEngine.Debug.Log("On removing is calling from context");
+            //UnityEngine.Debug.Log("On removing is calling from context");
         }
 
         private void initialize()
         {
-            MapBindings();
+            addCoreComponents();
+            mapBindings();
         }
 
         private void addCoreComponents()
         {
             injectionBinder.Map<ICommandBinder, CommandBinder>();
             _commandBinder = injectionBinder.GetInstance<ICommandBinder>();
+            injectionBinder.Map(typeof(IInjectionBinder), injectionBinder); // self inject...
             injectionBinder.TryToInject(_commandBinder);
+            injectionBinder.UnBind<IInjectionBinder>();
         }
     }
 }

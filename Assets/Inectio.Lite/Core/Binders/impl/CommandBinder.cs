@@ -94,7 +94,7 @@ namespace Inectio.Lite
                 var method = getGenericMethod(binding.Key);
                 var b = injectionBinder.GetBinding(binding.Key);
                 var signal = injectionBinder.GetInstance(binding.Key) as IBaseSignal;
-                RemoveDelegate(this, signal, method);
+                RemoveDelegate(this, signal, method); // remove previous delegate
                 AddDelegate(this, signal, method);
             }
         }
@@ -249,7 +249,6 @@ namespace Inectio.Lite
             if (type.IsGenericType)
             {
                 var gParams = type.GetGenericArguments();
-                var signal = injectionBinder.GetInstance(binding.Key);
                 switch (gParams.Length)
                 {
                     case 1:

@@ -59,7 +59,7 @@ namespace Inectio.Lite
             return _listener;
         }
 
-        public void RemoveAllListeners()
+        public virtual void RemoveAllListeners()
         {
             commandListener = null;
         }
@@ -109,7 +109,7 @@ namespace Inectio.Lite
             return _listener;
         }
 
-        public void RemoveAllListeners()
+        public virtual void RemoveAllListeners()
         {
             commandListener = null;
         }
@@ -160,7 +160,7 @@ namespace Inectio.Lite
             return _listener;
         }
 
-        public void RemoveAllListeners()
+        public virtual void RemoveAllListeners()
         {
             commandListener = null;
         }
@@ -212,7 +212,7 @@ namespace Inectio.Lite
             return _listener;
         }
 
-        public void RemoveAllListeners()
+        public virtual void RemoveAllListeners()
         {
             commandListener = null;
         }
@@ -317,7 +317,7 @@ namespace Inectio.Lite
             }
         }
 
-        new public void RemoveAllListeners()
+        public override void RemoveAllListeners()
         {
             listener = null;
         }
@@ -368,7 +368,7 @@ namespace Inectio.Lite
             }
         }
 
-        new public void RemoveAllListeners()
+        public override void RemoveAllListeners()
         {
             listener = null;
         }
@@ -420,7 +420,7 @@ namespace Inectio.Lite
             }
         }
 
-        new public void RemoveAllListeners()
+        public override void RemoveAllListeners()
         {
             listener = null;
         }
@@ -444,7 +444,7 @@ namespace Inectio.Lite
 
     public class Signal<T, U, Q> : BaseSignal<T, U, Q>, ISignal
     {
-        public Delegate Listener
+        new public Delegate Listener
         {
             get
             {
@@ -472,7 +472,7 @@ namespace Inectio.Lite
             }
         }
 
-        public void RemoveAllListeners()
+        public override void RemoveAllListeners()
         {
             listener = null;
         }
@@ -523,7 +523,7 @@ namespace Inectio.Lite
             }
         }
 
-        new public void RemoveAllListeners()
+        public override void RemoveAllListeners()
         {
             listener = null;
         }

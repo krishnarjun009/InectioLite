@@ -9,7 +9,7 @@ namespace Inectio.Lite
             
         }
         
-		public override void MapBindings()
+		public override void mapBindings()
 		{
             injectionBinder.Map<SampleData>();
             injectionBinder.Map<TestSignal>();
@@ -33,6 +33,8 @@ namespace Inectio.Lite
             //injectionBinder.Map<BallInputSignal>();
             //injectionBinder.Map<GameStartNotifierSignal>();
             //injectionBinder.Map<IGameData, GameData>();
+
+           
         }
 	}
 
@@ -49,6 +51,8 @@ namespace Inectio.Lite
         }
     }
 
+   
+
     public class commandsignal : Signal<int, int, string, int> { }
     public class commandsignal1 : Signal<int, string> { }
     public class commandsignal2 : Signal<int, int, string, int> { }
@@ -58,8 +62,8 @@ namespace Inectio.Lite
 
 		public override void Execute(int type1, int type2, string type3, int type4)
 		{
-            //UnityEngine.Debug.Log("Command - type3 data: " + type3);
-            //testSignal.Dispatch();
+            UnityEngine.Debug.Log("Command - type3 data: " + type3);
+            testSignal.Dispatch();
 		}
 	}
 

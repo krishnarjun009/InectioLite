@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-
+ 
 namespace Inectio.Lite
 {
     public interface IInjectionBinder
@@ -31,7 +31,11 @@ namespace Inectio.Lite
         {
             injector = new Injector();
             injector.injectionBinder = this;
-            Map(typeof(IInjectionBinder), this); // self inject...
+        }
+
+        public Injector GetInjector()
+        {
+            return injector;
         }
 
         new public IInjectionBinding Map<TKey, TValue>()
