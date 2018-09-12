@@ -60,7 +60,7 @@ Signals are event delegates. Signals are core system in any DI framework. It wil
    ```
          
 # Commands
-Commands are useful to update game data or Make Server Api's calls from command to service. I recommended use commands for updattion or api calls. You have to override the execute method. Command Parameters should match with signal parameters. Otherwise it will an exception says, "method arguments are Invalid".
+Commands are useful to update game data or Make Server Api's calls from command to service. I recommended use commands for data updation or api calls. You have to override the execute method. Command Parameters should match with signal parameters. Otherwise it will an exception says, "method arguments are Invalid".
 
    - Syntax:
    ``` C#
@@ -85,6 +85,6 @@ Commands are useful to update game data or Make Server Api's calls from command 
 
 
 
-Check the Demo Project for Better understanding. It is lightweight IOC Framework for smaller or below mid range projects. Add if you find any issues in Issues Section.
+Check the Demo Project for Better understanding. It is lightweight IOC Framework for smaller or below mid range projects. Add if you find any issues pls mention in Issues Section.
 
 😃THANKS
