@@ -12,5 +12,6 @@ namespace Inectio.Lite
         IBinding GetBinding(Type key, string name);
         void ResolveBinding(IBinding binding);
         ReflectedItems Get(Type type);
+        void OnRemove();
     }
 }

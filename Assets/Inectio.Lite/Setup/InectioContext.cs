@@ -16,6 +16,8 @@ namespace Inectio.Lite
             injectionBinder.Map<JumpInputSignal>();
             injectionBinder.Map<OnPlayerDiedSignal>();
             injectionBinder.Map<ISample, SampleData>();
+            //injectionBinder.Map<commandsignal>();
+            //injectionBinder.Map<int>();
 
             commandBinder.Map<TestSignal, TestCommand>().Pooled();
             commandBinder.Map<commandsignal, genericcommand>().Pooled();
@@ -45,9 +47,11 @@ namespace Inectio.Lite
 
     public class SampleData : ISample
     {
+        [Inject] private TestSignal testSignal { get; set; }
         public void Print()
         {
-            //UnityEngine.Debug.Log("Test Working");
+            UnityEngine.Debug.Log("Calling from sample data print method-------");
+            testSignal.Dispatch();
         }
     }
 

@@ -18,7 +18,8 @@ namespace Inectio.Lite
 
         public object GetInstance(IInjectionBinding binding)
         {
-            return injectionFactory.GetInstance(binding);
+            var obj = injectionFactory.GetInstance(binding);
+            return obj;
         }
 
         public object GetInstance(object value)
@@ -30,9 +31,13 @@ namespace Inectio.Lite
         {
             //todo: map all relfections to reflection binder. so when u get the same view again you can get the maps directly...
             var reflected = reflectionBinder.Get(target.GetType());
-            injectProperties(reflected.properties, target);
-            injectFields(reflected.fields, target);
-            injectMethods(reflected.methods, target);
+            if (!reflected.preReflected) // dont do injections again if it is already pre generated...
+            {
+                //UnityEngine.Debug.Log("Inecting " + target);
+                injectProperties(reflected.properties, target);
+                injectFields(reflected.fields, target);
+                injectMethods(reflected.methods, target);
+            }
         }
 
         public void OnRemove(object target)
@@ -49,17 +54,21 @@ namespace Inectio.Lite
                     {
                         //todo: remove delegate attached delegate for the current method...
                         var binding = injectionBinder.GetBinding(method.methodListenType);
-                        var obj = GetInstance(binding) as ISignal;
+                        var obj = binding.Value as ISignal;
                         if (obj != null)
                             RemoveDelegate(target, obj, method.info);
                     }
                 }
             }
+
+            reflectionBinder.OnRemove();
         }
 
         private object getValue(Type type, string name)
         {
-            return GetInstance(injectionBinder.GetBinding(type, name) as IInjectionBinding);
+            var obj = GetInstance(injectionBinder.GetBinding(type, name) as IInjectionBinding);
+            Inject(obj); // applying injections for each binding itself...
+            return obj;
         }
 
         private void injectProperties(PropertyAttributes[] properties, object target)
@@ -68,6 +77,7 @@ namespace Inectio.Lite
             {
                 foreach (var prop in properties)
                 {
+                    //UnityEngine.Debug.Log("prop " + prop.type);
                     prop.info.SetValue(target, getValue(prop.type, prop.name), null);
                 }
             }

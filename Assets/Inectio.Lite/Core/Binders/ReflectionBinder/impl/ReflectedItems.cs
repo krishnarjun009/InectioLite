@@ -10,6 +10,7 @@ namespace Inectio.Lite
         public FieldAttributes[] fields { get; set; }
         //public ConstructorInfo[] constructors { get; set; }
         public MethodAttributes[] methods { get; set; }
+        public bool preReflected { get; set; }
     }
 
     public class PropertyAttributes

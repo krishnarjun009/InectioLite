@@ -156,7 +156,7 @@ namespace Inectio.Lite
 
         public void Dispose()
         {
-            UnityEngine.Debug.Log("Disposing Bindings");
+            //UnityEngine.Debug.Log("Disposing Bindings");
             bindings.Clear();
         }
 
