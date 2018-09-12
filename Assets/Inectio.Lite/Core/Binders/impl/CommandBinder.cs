@@ -56,6 +56,7 @@ namespace Inectio.Lite
             {
                 //lets create one...
                 injectionBinder.Map(key);
+                //UnityEngine.Debug.Log("Mapping from command " + key);
             }
             if(bindings.ContainsKey(key)) // SUPPORT ME FOR MULTIPLE COMMAND BINDINGS FOR SAME SIGNAL...
             {

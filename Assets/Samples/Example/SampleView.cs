@@ -6,8 +6,8 @@ namespace Sample
 {
     public class SampleView : View
     {
+        [Inject] private TestSignal testSignal { get; set; }
         [Inject] private SampleData data { get; set; }
-        //Inject] private TestSignal testSignal;
         [Inject] private commandsignal commandsignal { get; set; }
         [Inject] private commandsignal2 commandsignal2 { get; set; }
         //[Inject("another")] private commandsignal commandsignal11 { get; set; }
@@ -16,7 +16,7 @@ namespace Sample
         protected override void Awake()
 		{
             base.Awake();       
-            data.Print();
+
             //testSignal.Dispatch();
 
             //Debug.Log("Creating gameobject");
@@ -30,8 +30,9 @@ namespace Sample
         public bool enableDebug = false;
 		private void Update()
 		{
-            commandsignal.Dispatch(4,6, "Hello", 9);
-            commandsignal2.Dispatch(4, 6, "Krishna", 9);
+            //data.Print();
+            //commandsignal.Dispatch(4,6, "Hello", 9);
+            //commandsignal2.Dispatch(4, 6, "Krishna", 9);
             //commandsignal11.DispatchToAll(1, "another");
             //commandsignal1.DispatchToAll(10, "anji1");
             //testSignal.DispatchToAll();

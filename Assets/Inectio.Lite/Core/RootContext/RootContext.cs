@@ -40,9 +40,9 @@ namespace Inectio.Lite
 
         private void addCoreComponents()
         {
+            injectionBinder.Map(typeof(IInjectionBinder), injectionBinder); // self inject...
             injectionBinder.Map<ICommandBinder, CommandBinder>();
             _commandBinder = injectionBinder.GetInstance<ICommandBinder>();
-            injectionBinder.Map(typeof(IInjectionBinder), injectionBinder); // self inject...
             injectionBinder.TryToInject(_commandBinder);
             injectionBinder.UnBind<IInjectionBinder>();
         }

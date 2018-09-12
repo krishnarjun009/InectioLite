@@ -13,6 +13,7 @@ namespace Inectio.Lite
 
         public ReflectedItems Get(Type type)
         {
+            ReflectedItems reflected = null;
             var binding = GetBinding(type);
             //UnityEngine.Debug.Log("Getting R Binding of type " + type);
             if(binding == null)
@@ -20,14 +21,20 @@ namespace Inectio.Lite
                 //UnityEngine.Debug.Log("Reflecting of type " + type);
                 //Console.WriteLine("Reflected once");
                 binding = GetRawBinding();
-                var reflected = new ReflectedItems();
+                reflected = new ReflectedItems();
                 mapProperties(reflected, type);
                 mapFields(reflected, type);
                 mapMethods(reflected, type);
                 binding.Map(type, reflected);//.Bind();
+                reflected.preReflected = false;
+            }
+            else
+            {
+                reflected = binding.Value as ReflectedItems;
+                reflected.preReflected = true;
             }
 
-            return binding.Value as ReflectedItems;
+            return reflected;
         }
 
 		private void mapProperties(ReflectedItems reflected, Type type)
