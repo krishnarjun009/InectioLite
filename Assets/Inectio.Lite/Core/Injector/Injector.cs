@@ -60,6 +60,8 @@ namespace Inectio.Lite
                     }
                 }
             }
+
+            reflectionBinder.OnRemove();
         }
 
         private object getValue(Type type, string name)

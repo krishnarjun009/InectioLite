@@ -6,10 +6,11 @@ namespace Sample
 {
     public class SampleView : View
     {
-        [Inject] private TestSignal testSignal { get; set; }
+        //[Inject] private TestSignal testSignal { get; set; }
         [Inject] private SampleData data { get; set; }
         [Inject] private commandsignal commandsignal { get; set; }
         [Inject] private commandsignal2 commandsignal2 { get; set; }
+        //[Inject] private int d { get; set; }
         //[Inject("another")] private commandsignal commandsignal11 { get; set; }
         //[Inject] private commandsignal1 commandsignal1 { get; set; }
 
@@ -30,7 +31,7 @@ namespace Sample
         public bool enableDebug = false;
 		private void Update()
 		{
-            //data.Print();
+            data.Print();
             //commandsignal.Dispatch(4,6, "Hello", 9);
             //commandsignal2.Dispatch(4, 6, "Krishna", 9);
             //commandsignal11.DispatchToAll(1, "another");

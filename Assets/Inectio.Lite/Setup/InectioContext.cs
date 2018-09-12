@@ -17,6 +17,7 @@ namespace Inectio.Lite
             injectionBinder.Map<OnPlayerDiedSignal>();
             injectionBinder.Map<ISample, SampleData>();
             //injectionBinder.Map<commandsignal>();
+            //injectionBinder.Map<int>();
 
             commandBinder.Map<TestSignal, TestCommand>().Pooled();
             commandBinder.Map<commandsignal, genericcommand>().Pooled();

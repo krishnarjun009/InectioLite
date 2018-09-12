@@ -37,6 +37,11 @@ namespace Inectio.Lite
             return reflected;
         }
 
+        public void OnRemove()
+        {
+            bindings.Clear();
+        }
+
 		private void mapProperties(ReflectedItems reflected, Type type)
         {
             //var properties = new List<PropertyAttributes>();

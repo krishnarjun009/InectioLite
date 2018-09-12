@@ -183,16 +183,13 @@ namespace Inectio.Lite
             {
                 if(!poolDict.ContainsKey(key))
                 {
-                    //UnityEngine.Debug.Log("Creating instance First time");
+                    // if not create one...
                     var o = binding.Value;
                     Type value = (o is Type) ? o as Type : o.GetType();
-                    //Console.WriteLine("Creating instacne of " + value);
                     var c = Activator.CreateInstance(value, null) as ICommand;
                     injectionBinder.TryToInject(c);
                     poolDict[key] = c;
                 }
-
-                //UnityEngine.Debug.Log("Getting command from pool");
                 return poolDict[key];
             }
 
