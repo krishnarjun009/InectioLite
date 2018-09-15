@@ -13,6 +13,8 @@ namespace Inectio.Lite
         IInjectionBinding GetBinding(Type key, string name);
         void UnBind<T>();
         void UnBind(Type key);
+        void UnBind(Type key, string name);
+        void UnBind<T>(string name);
         object GetInstance(Type key);
         object GetInstance(Type key, string name);
         object GetInstance(IInjectionBinding binding);
@@ -72,15 +74,29 @@ namespace Inectio.Lite
 
         virtual public void UnBind<T>()
         {
-            UnBind(typeof(T));
+            UnBind(typeof(T), "");
+        }
+
+        virtual public void UnBind(Type key, string name)
+        {
+            if (bindings.ContainsKey(key))
+            {
+                var values = bindings[key];
+                if(values.ContainsKey(name))
+                {
+                    bindings.Remove(key);
+                }
+            }
+        }
+
+        virtual public void UnBind<T>(string name)
+        {
+            UnBind(typeof(T), name);
         }
 
         virtual public void UnBind(Type key)
         {
-            if (bindings.ContainsKey(key))
-            {
-                bindings.Remove(key);
-            }
+            UnBind(key, "");
         }
 
 		public override void ResolveBinding(IBinding binding)

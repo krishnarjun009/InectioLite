@@ -27,15 +27,15 @@ namespace Inectio.Lite
 
         private readonly Dictionary<Type, ICommand> poolDict;
         private readonly MethodInfo methodZero, methodOne, methodTwo, methodThree, methodFour; // caching method references.
-        BindingFlags flags = BindingFlags.FlattenHierarchy |
-                         BindingFlags.SetProperty |
-                         BindingFlags.Public |
-                         BindingFlags.NonPublic |
-                         BindingFlags.Instance;
 
         public CommandBinder()
         {
             poolDict = new Dictionary<Type, ICommand>();
+            var flags = BindingFlags.FlattenHierarchy |
+                         BindingFlags.SetProperty |
+                         BindingFlags.Public |
+                         BindingFlags.NonPublic |
+                         BindingFlags.Instance;
             var gtype = this.GetType();
             methodZero = gtype.GetMethod("GenericCommandZero", flags);
             methodOne = gtype.GetMethod("GenericCommandOne", flags);
@@ -60,7 +60,7 @@ namespace Inectio.Lite
             }
             if(bindings.ContainsKey(key)) // SUPPORT ME FOR MULTIPLE COMMAND BINDINGS FOR SAME SIGNAL...
             {
-                throw new InectioException(key + " type has already command mapping");
+                throw new InectioException(key + " type already has command mapping");
             }
 
             return base.Map(key, value) as ICommandBinding;

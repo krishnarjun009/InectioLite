@@ -24,7 +24,7 @@ namespace Inectio.Lite
         /// </summary>
         virtual protected void OnEnable()
         {
-            RootContext.firstContext.injectionBinder.OnAutoSignalHandler(true, this);
+            RootContext.firstContext.injectionBinder.OnAutoSignalHandler(true, this);// support for single context
         }
 
         /// <summary>
