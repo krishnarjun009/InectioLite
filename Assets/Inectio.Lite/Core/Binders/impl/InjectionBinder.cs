@@ -3,8 +3,6 @@ using System.Linq;
  
 namespace Inectio.Lite
 {
-    public class InectioAutoEnableDisableSignal : Signal<bool, IView> { }
-
     public interface IInjectionBinder
     {
         IInjectionBinding Map<TKey, TValue>();
@@ -29,16 +27,12 @@ namespace Inectio.Lite
     public class InjectionBinder : CoreBinder, IInjectionBinder
     {
         private readonly Injector injector;
-        [Inject] private InectioAutoEnableDisableSignal autoEnableDisableSignal { get; set; }
 
         public InjectionBinder()
         {
             injector = new Injector();
             injector.injectionBinder = this;
             Map(typeof(IInjectionBinder), this); // self inject...
-            Map<InectioAutoEnableDisableSignal>();
-            //autoEnableDisableSignal = new InectioAutoEnableDisableSignal();
-            GetInstance<InectioAutoEnableDisableSignal>().AddListener(OnAutoSignalHandler);
         }
 
         public Injector GetInjector()
@@ -130,6 +124,11 @@ namespace Inectio.Lite
             return injector.GetInstance(binding);
         }
 
+        public void OnAutoSignalHandler(bool enable, IView view)
+        {
+            injector.RemoveAutoSignals(view, enable);
+        }
+
         protected override void resolver(IBinding binding)
         {
             base.resolver(binding);
@@ -138,11 +137,6 @@ namespace Inectio.Lite
         protected override IBinding GetRawBinding()
         {
             return new InjectionBinding(resolver);
-        }
-
-        public void OnAutoSignalHandler(bool enable, IView view)
-        {
-            injector.RemoveAutoSignals(view, enable);
         }
     }
 }

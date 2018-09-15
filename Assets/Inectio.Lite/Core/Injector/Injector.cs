@@ -158,13 +158,13 @@ namespace Inectio.Lite
         {
             if (signal.GetType().BaseType.IsGenericType)
             {
-                UnityEngine.Debug.Log("Adding delegate to " + target);
+                //UnityEngine.Debug.Log("Adding delegate to " + target);
                 var toAdd = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Combine(signal.Listener, toAdd);
             }
             else
             {
-                UnityEngine.Debug.Log("nono generic Adding delegate to " + target);
+                //UnityEngine.Debug.Log("nono generic Adding delegate to " + target);
                 var s = signal as Signal;
                 s.AddListener((Action)Delegate.CreateDelegate(typeof(Action), target, method));
             }
@@ -174,14 +174,13 @@ namespace Inectio.Lite
         {
             if (signal.GetType().BaseType.IsGenericType)
             {
-                //UnityEngine.Debug.Log("Removing Listener " + method.Name);
-                UnityEngine.Debug.Log("Removing Listener Generic" + method.Name);
+                //UnityEngine.Debug.Log("Removing Listener Generic" + method.Name);
                 Delegate toRemove = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Remove(signal.Listener, toRemove);
             }
             else
             {
-                UnityEngine.Debug.Log("Removing Listener " + method.Name);
+                //UnityEngine.Debug.Log("Removing Listener " + method.Name);
                 var s = signal as Signal;
                 s.RemoveListener((Action)Delegate.CreateDelegate(typeof(Action), target, method));
             }
