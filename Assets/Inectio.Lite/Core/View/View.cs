@@ -19,11 +19,17 @@ namespace Inectio.Lite
         {
         }
 
+        /// <summary>
+        /// Handles Auto Listen signals OnEnable
+        /// </summary>
         virtual protected void OnEnable()
         {
             RootContext.firstContext.injectionBinder.OnAutoSignalHandler(true, this);
         }
 
+        /// <summary>
+        /// Handles Auto Listen signals OnDisable
+        /// </summary>
         virtual protected void OnDisable()
         {
             RootContext.firstContext.injectionBinder.OnAutoSignalHandler(false, this);
