@@ -5,6 +5,7 @@ namespace Inectio.Lite
 {
     public class View : MonoBehaviour, IView
     {
+        [Inject] protected InectioAutoEnableDisableSignal autoEnableDisableSignal { get; set; }
         /// <summary>
         /// OnRegister will execute after Awake method.
         /// </summary>
@@ -17,6 +18,16 @@ namespace Inectio.Lite
         /// </summary>
         virtual public void OnRemove()
         {
+        }
+
+        virtual protected void OnEnable()
+        {
+            autoEnableDisableSignal.Dispatch(true, this);
+        }
+
+        virtual protected void OnDisable()
+        {
+            autoEnableDisableSignal.Dispatch(false, this);
         }
 
         /// <summary>

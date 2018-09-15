@@ -117,6 +117,7 @@ namespace Inectio.Lite
         private void mapMethods(ReflectedItems reflected, Type type)
         {
             var methods = new List<MethodAttributes>();
+            var listenMethods = new List<AutoListenMethodAttributes>();
             var members = type.FindMembers(MemberTypes.Method,
                                                              BindingFlags.FlattenHierarchy |
                                                              BindingFlags.SetProperty |
@@ -127,30 +128,24 @@ namespace Inectio.Lite
             
             foreach (var member in members)
             {
-                MethodAttributes methodAttributes = null;
                 object[] injections = member.GetCustomAttributes(typeof(Inject), true);
                 MethodInfo method = member as MethodInfo;
                 if (injections.Length > 0)
                 {
-                    methodAttributes = mapInjectAttributeMethod(injections[0] as Inject, method);
+                    methods.Add(mapInjectAttributeMethod(injections[0] as Inject, method));
                 }
 
                 object[] listeners = member.GetCustomAttributes(typeof(Listen), true);
                 if(listeners.Length > 0)
                 {
-                    if(methodAttributes == null)
-                    {
-                        methodAttributes = new MethodAttributes(method, null, method.DeclaringType, null);
-                        //methodAttributes.methodListenType = (listeners[0] as Listen).type;
-                    }
-                    methodAttributes.methodListenType = (listeners[0] as Listen).type;
+                    var listen = listeners[0] as Listen;
+                    var lMethod = new AutoListenMethodAttributes(method, listen.type, listen.listenType);
+                    listenMethods.Add(lMethod);
                 }
-
-                if (methodAttributes != null)
-                    methods.Add(methodAttributes);
             }
 
             reflected.methods = methods.ToArray();
+            reflected.listenMethods = listenMethods.ToArray();
         }
 
         private MethodAttributes mapInjectAttributeMethod(Inject attr, MethodInfo method)

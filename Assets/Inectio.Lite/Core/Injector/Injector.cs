@@ -22,6 +22,30 @@ namespace Inectio.Lite
             return obj;
         }
 
+        public void RemoveAutoSignals(object target, bool enable)
+        {
+            var rBinder = reflectionBinder.Get(target.GetType());
+            var methods = rBinder.listenMethods;
+            var length = methods.Length;
+            if (length == 0) return;
+            for(int i = 0; i<length; i++)
+            {
+                if (methods[i].listenType != Listen.ListenType.AUTO) continue;
+                var binding = injectionBinder.GetBinding(methods[i].type);
+                if (binding != null)
+                {
+                    var signal = binding.Value as ISignal;
+                    if (signal != null)
+                    {
+                        if (enable)
+                            AddDelegate(target, signal, methods[i].info);
+                        else
+                            RemoveDelegate(target, signal, methods[i].info);
+                    }
+                }
+            }
+        }
+
         public object GetInstance(object value)
         {
             return injectionFactory.CreateInstance(value);
@@ -37,6 +61,7 @@ namespace Inectio.Lite
                 injectProperties(reflected.properties, target);
                 injectFields(reflected.fields, target);
                 injectMethods(reflected.methods, target);
+                injectListenMethods(reflected.listenMethods, target);
             }
         }
 
@@ -47,17 +72,15 @@ namespace Inectio.Lite
             {
                 var reflected = rBinder.Value as ReflectedItems;
                 //todo: remove all bindings and also remove listen method delegates for the target object...
-                var methods = reflected.methods;
+                var methods = reflected.listenMethods;
                 foreach(var method in methods)
                 {
-                    if(method.methodListenType != null)
-                    {
-                        //todo: remove delegate attached delegate for the current method...
-                        var binding = injectionBinder.GetBinding(method.methodListenType);
-                        var obj = binding.Value as ISignal;
-                        if (obj != null)
-                            RemoveDelegate(target, obj, method.info);
-                    }
+                    //todo: remove delegate attached delegate for the current method...
+                    if (method.listenType == Listen.ListenType.AUTO) continue;
+                    var binding = injectionBinder.GetBinding(method.type);
+                    var obj = binding.Value as ISignal;
+                    if (obj != null)
+                        RemoveDelegate(target, obj, method.info);
                 }
             }
 
@@ -94,6 +117,21 @@ namespace Inectio.Lite
             }
         }
 
+        private void injectListenMethods(AutoListenMethodAttributes[] methods, object target)
+        {
+            if(methods.Length > 0)
+            {
+                foreach(var method in methods)
+                {
+                    var binding = injectionBinder.GetBinding(method.type);
+                    var obj = GetInstance(binding) as ISignal;
+                    //UnityEngine.Debug.Log("Siganl " + obj);
+                    if (obj != null)
+                        AddDelegate(target, obj, method.info);
+                }
+            }
+        }
+
         private void injectMethods(MethodAttributes[] methods, object target)
         {
             if (methods.Length > 0)
@@ -111,16 +149,6 @@ namespace Inectio.Lite
                         }
                         method.info.Invoke(target, paramsData);
                     }
-                    if(method.methodListenType != null)
-                    {
-                        //todo: Create delegate for this method and signal.
-                        //UnityEngine.Debug.Log("Creating delegate here " + method.methodListenType);
-                        var binding = injectionBinder.GetBinding(method.methodListenType);
-                        var obj = GetInstance(binding) as ISignal;
-                        //UnityEngine.Debug.Log("Siganl " + obj);
-                        if(obj != null)
-                            AddDelegate(target, obj, method.info);
-                    }
                 }
             }
         }
@@ -130,13 +158,13 @@ namespace Inectio.Lite
         {
             if (signal.GetType().BaseType.IsGenericType)
             {
-                //UnityEngine.Debug.Log("Adding delegate to " + target);
+                UnityEngine.Debug.Log("Adding delegate to " + target);
                 var toAdd = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Combine(signal.Listener, toAdd);
             }
             else
             {
-                //UnityEngine.Debug.Log("nono generic Adding delegate to " + target);
+                UnityEngine.Debug.Log("nono generic Adding delegate to " + target);
                 var s = signal as Signal;
                 s.AddListener((Action)Delegate.CreateDelegate(typeof(Action), target, method));
             }
@@ -147,12 +175,13 @@ namespace Inectio.Lite
             if (signal.GetType().BaseType.IsGenericType)
             {
                 //UnityEngine.Debug.Log("Removing Listener " + method.Name);
+                UnityEngine.Debug.Log("Removing Listener Generic" + method.Name);
                 Delegate toRemove = Delegate.CreateDelegate(signal.Listener.GetType(), target, method);
                 signal.Listener = Delegate.Remove(signal.Listener, toRemove);
             }
             else
             {
-                //UnityEngine.Debug.Log("Removing Listener " + method.Name);
+                UnityEngine.Debug.Log("Removing Listener " + method.Name);
                 var s = signal as Signal;
                 s.RemoveListener((Action)Delegate.CreateDelegate(typeof(Action), target, method));
             }

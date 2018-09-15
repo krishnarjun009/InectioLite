@@ -37,11 +37,25 @@ namespace Inectio.Lite
         Inherited = true)]
     public class Listen : Attribute
     {
+        public enum ListenType
+        {
+            AUTO,
+            MANUAL
+        };
+
         public Type type { get; set; }
+        public ListenType listenType { get; set; }
 
         public Listen(Type type) 
         {
             this.type = type;
+            listenType = ListenType.MANUAL; // by default we setting it to manual.
+        }
+
+        public Listen(Type type, ListenType listenType)
+        {
+            this.type = type;
+            this.listenType = listenType;
         }
     }
 }

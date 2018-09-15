@@ -55,6 +55,11 @@ namespace Sample
         {
             //Debug.Log("both " + str);
         }
+        [Listen(typeof(TestSignal), Listen.ListenType.AUTO)]
+        private void AutoTest()
+        {
+            Debug.Log("Auto enable disable signal");
+        }
 	}
 
     public interface IAsTest
