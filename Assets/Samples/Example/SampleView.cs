@@ -31,7 +31,7 @@ namespace Sample
         public bool enableDebug = false;
 		private void Update()
 		{
-            data.Print();
+           
             //commandsignal.Dispatch(4,6, "Hello", 9);
             //commandsignal2.Dispatch(4, 6, "Krishna", 9);
             //commandsignal11.DispatchToAll(1, "another");

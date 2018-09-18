@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
  
 namespace Inectio.Lite
 {
@@ -23,7 +22,7 @@ namespace Inectio.Lite
         void TryToInject(object type);
         void ResolveBinding(IBinding binding);
         void OnRemove(IView view);
-        void OnAutoSignalHandler(bool enable, IView view);
+        void OnAutoSignalHandler(bool enable, object target);
     }
 
     public class InjectionBinder : CoreBinder, IInjectionBinder
@@ -34,7 +33,6 @@ namespace Inectio.Lite
         {
             injector = new Injector();
             injector.injectionBinder = this;
-            Map(typeof(IInjectionBinder), this); // self inject...
         }
 
         public Injector GetInjector()
@@ -140,9 +138,9 @@ namespace Inectio.Lite
             return injector.GetInstance(binding);
         }
 
-        public void OnAutoSignalHandler(bool enable, IView view)
+        public void OnAutoSignalHandler(bool enable, object target)
         {
-            injector.RemoveAutoSignals(view, enable);
+            injector.RemoveAutoSignals(target, enable);
         }
 
         protected override void resolver(IBinding binding)

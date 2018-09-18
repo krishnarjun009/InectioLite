@@ -20,12 +20,17 @@ namespace Sample
             testSignal.RemoveListener(OnTestSignal);
 		}
 
-        private void OnTestSignal()
+		private void Update()
+		{
+            data.Print();
+		}
+
+		private void OnTestSignal()
         {
-            //Debug.Log("SampleView 1 " + gameObject.name);
+            Debug.Log("SampleView 1 " + gameObject.name);
         }
 
-        [Listen(typeof(TestSignal))]
+        //[Listen(typeof(TestSignal))]
         private void ListenMethodTest()
         {
             data.Print();
