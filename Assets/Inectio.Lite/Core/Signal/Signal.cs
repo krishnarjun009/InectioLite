@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public interface ISignal
     {

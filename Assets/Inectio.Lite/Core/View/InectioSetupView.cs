@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public class InectioSetupView : MonoBehaviour
     {

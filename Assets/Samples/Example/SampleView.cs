@@ -1,5 +1,5 @@
 ﻿using System;
-using Inectio.Lite;
+using Iniectio.Lite;
 using UnityEngine;
 
 namespace Sample

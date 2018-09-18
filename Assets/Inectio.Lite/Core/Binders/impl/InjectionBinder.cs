@@ -1,6 +1,6 @@
 ﻿using System;
  
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public interface IInjectionBinder
     {

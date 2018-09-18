@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace com.bonucyballs.inectio
+namespace com.bonucyballs.Iniectio
 {
     public interface IGameData
     {

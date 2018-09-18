@@ -1,7 +1,7 @@
-﻿using Inectio.Lite;
+﻿using Iniectio.Lite;
 using UnityEngine;
 
-namespace com.bonucyballs.inectio
+namespace com.bonucyballs.Iniectio
 {
     public class InputController : View
     {

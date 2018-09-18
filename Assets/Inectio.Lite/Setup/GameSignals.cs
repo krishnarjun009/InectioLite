@@ -1,5 +1,5 @@
 ﻿
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public class TestSignal : Signal { }
     public class JumpInputSignal : Signal { }

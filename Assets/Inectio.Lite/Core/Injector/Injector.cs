@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public class Injector
     {

@@ -1,7 +1,7 @@
-﻿using Inectio.Lite;
+﻿using Iniectio.Lite;
 using System;
 
-namespace com.bonucyballs.inectio
+namespace com.bonucyballs.Iniectio
 {
     public class BallInputSignal : Signal<InputDirection> { }
     public class LevelCompletedSignal : Signal { }

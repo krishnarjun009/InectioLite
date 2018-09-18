@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public class View : MonoBehaviour, IView
     {

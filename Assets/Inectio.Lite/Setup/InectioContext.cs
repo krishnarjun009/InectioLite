@@ -1,6 +1,6 @@
-﻿using com.bonucyballs.inectio;
+﻿using com.bonucyballs.Iniectio;
 
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public class InectioContext : RootContext
     {

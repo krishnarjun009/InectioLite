@@ -1,6 +1,6 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public class InectioBootStrap : MonoBehaviour
     {

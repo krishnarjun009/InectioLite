@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     public interface ICommandBinding
     {

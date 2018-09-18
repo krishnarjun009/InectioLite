@@ -1,4 +1,4 @@
-﻿using Inectio.Lite;
+﻿using Iniectio.Lite;
 using UnityEngine;
 
 public class InputController : View {

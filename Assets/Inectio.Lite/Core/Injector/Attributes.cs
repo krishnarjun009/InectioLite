@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Inectio.Lite
+namespace Iniectio.Lite
 {
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Method,
         AllowMultiple = false,

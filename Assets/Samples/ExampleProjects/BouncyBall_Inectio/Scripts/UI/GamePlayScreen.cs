@@ -1,8 +1,8 @@
-﻿using Inectio.Lite;
+﻿using Iniectio.Lite;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace com.bonucyballs.inectio
+namespace com.bonucyballs.Iniectio
 {
     public class GamePlayScreen : View
     {
