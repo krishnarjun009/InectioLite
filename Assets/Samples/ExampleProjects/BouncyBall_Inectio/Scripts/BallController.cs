@@ -27,14 +27,15 @@ namespace com.bonucyballs.Iniectio
         private Vector3 startPosition;
         private InputDirection direction;
 
-        void Start()
-        {
+		protected override void Start()
+		{
+            base.Start();
             rigidbody = GetComponent<Rigidbody2D>();
             // save the horizontal center of the screen
             startPosition = transform.position;
             startJumpHeight = jumpHeight;
             direction = InputDirection.NONE;
-        }
+		}
 
         [Listen(typeof(BallInputSignal))]
         private void OnBallInputHandler(InputDirection direction)

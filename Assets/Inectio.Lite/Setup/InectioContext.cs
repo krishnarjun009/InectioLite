@@ -11,17 +11,17 @@ namespace Iniectio.Lite
         
 		public override void mapBindings()
 		{
-            //injectionBinder.Map<SampleData>();
-            //injectionBinder.Map<TestSignal>();
-            //injectionBinder.Map<JumpInputSignal>();
-            //injectionBinder.Map<OnPlayerDiedSignal>();
-            //injectionBinder.Map<ISample, SampleData>();
-            ////injectionBinder.Map<commandsignal>();
-            ////injectionBinder.Map<int>();
+            injectionBinder.Map<SampleData>();
+            injectionBinder.Map<TestSignal>();
+            injectionBinder.Map<JumpInputSignal>();
+            injectionBinder.Map<OnPlayerDiedSignal>();
+            injectionBinder.Map<ISample, SampleData>();
+            //injectionBinder.Map<commandsignal>();
+            //injectionBinder.Map<int>();
 
-            //commandBinder.Map<TestSignal, TestCommand>().Pooled();
-            //commandBinder.Map<commandsignal, genericcommand>().Pooled();
-            //commandBinder.Map<commandsignal2, genericcommand>().Pooled();
+            commandBinder.Map<TestSignal, TestCommand>().Pooled();
+            commandBinder.Map<commandsignal, genericcommand>().Pooled();
+            commandBinder.Map<commandsignal2, genericcommand>().Pooled();
             //commandBinder.Map<commandsignal, genericcommand1>().ToName("another").Pooled();
             //commandBinder.Map<commandsignal1, genericcommand>().Pooled();
 
@@ -35,10 +35,8 @@ namespace Iniectio.Lite
             injectionBinder.Map<BallInputSignal>();
             injectionBinder.Map<GameStartNotifierSignal>();
             injectionBinder.Map<IGameData, GameData>();
-
+             
             commandBinder.Map<SaveGameDataSignal, SaveGameDataCommand>();
-
-           
         }
 	}
 
@@ -52,7 +50,7 @@ namespace Iniectio.Lite
         [Inject] private TestSignal testSignal { get; set; }
         public void Print()
         {
-            UnityEngine.Debug.Log("Calling from sample data print method-------");
+            //UnityEngine.Debug.Log("Calling from sample data print method-------");
             testSignal.Dispatch();
         }
     }
@@ -68,8 +66,8 @@ namespace Iniectio.Lite
 
 		public override void Execute(int type1, int type2, string type3, int type4)
 		{
-            UnityEngine.Debug.Log("Command - type3 data: " + type3);
-            testSignal.Dispatch();
+            //UnityEngine.Debug.Log("Command - type3 data: " + type3);
+            //testSignal.Dispatch();
 		}
 	}
 
@@ -85,7 +83,7 @@ namespace Iniectio.Lite
     {
 		public override void Execute()
 		{
-            UnityEngine.Debug.Log("Command is working");
+            //UnityEngine.Debug.Log("Command is working");
 		}
 	}
 }

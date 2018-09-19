@@ -30,7 +30,8 @@ namespace Sample
         IAsTest asTest = new asTest();
         public bool enableDebug = false;
 		private void Update()
-		{
+        {
+            commandsignal.Dispatch(1, 2, "hello", 3);
            
             //commandsignal.Dispatch(4,6, "Hello", 9);
             //commandsignal2.Dispatch(4, 6, "Krishna", 9);
@@ -58,7 +59,7 @@ namespace Sample
         [Listen(typeof(TestSignal), Listen.ListenType.AUTO)]
         private void AutoTest()
         {
-            Debug.Log("Auto enable disable signal");
+            //Debug.Log("Auto enable disable signal");
         }
 	}
 

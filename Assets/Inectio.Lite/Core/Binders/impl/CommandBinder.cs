@@ -25,23 +25,11 @@ namespace Iniectio.Lite
     {
         [Inject] private IInjectionBinder injectionBinder { get; set; }
 
-        private readonly Dictionary<Type, ICommand> poolDict;
-        private readonly MethodInfo methodZero, methodOne, methodTwo, methodThree, methodFour; // caching method references.
+        private readonly Dictionary<Type, Queue<ICommand>> pool = new Dictionary<Type, Queue<ICommand>>();
 
         public CommandBinder()
         {
-            poolDict = new Dictionary<Type, ICommand>();
-            var flags = BindingFlags.FlattenHierarchy |
-                         BindingFlags.SetProperty |
-                         BindingFlags.Public |
-                         BindingFlags.NonPublic |
-                         BindingFlags.Instance;
-            var gtype = this.GetType();
-            methodZero = gtype.GetMethod("GenericCommandZero", flags);
-            methodOne = gtype.GetMethod("GenericCommandOne", flags);
-            methodTwo = gtype.GetMethod("GenericCommandTwo", flags);
-            methodThree = gtype.GetMethod("GenericCommandThree", flags);
-            methodFour = gtype.GetMethod("GenericCommandFour", flags);
+            
         }
 
         new public ICommandBinding Map<TKey, TValue>()
@@ -97,6 +85,18 @@ namespace Iniectio.Lite
                 var signal = injectionBinder.GetInstance(binding.Key) as IBaseSignal;
                 RemoveDelegate(this, signal, method); // remove previous delegate
                 AddDelegate(this, signal, method);
+
+                if((binding as ICommandBinding).IsPooled)
+                {
+                    var t = binding.Value as Type;
+                    if (!pool.ContainsKey(t))
+                    {
+                        var cmd = createCommandForPool(t);
+                        var q = new Queue<ICommand>();
+                        q.Enqueue(cmd);
+                        pool[t] = q;
+                    }
+                }
             }
         }
 
@@ -132,7 +132,7 @@ namespace Iniectio.Lite
             }
 
             bindings.Clear();
-            poolDict.Clear();
+            pool.Clear();
         }
 
         protected override void resolver(IBinding binding)
@@ -149,24 +149,28 @@ namespace Iniectio.Lite
         {
             var command = getCommand(signal.GetType());
             (command as Command).Execute();
+            releaseCommand(command);
         }
 
         private void GenericCommandOne<T>(IBaseSignal signal, T type1)
         {
             var command = getCommand(signal.GetType());
             (command as Command<T>).Execute(type1);
+            releaseCommand(command);
         }
 
         private void GenericCommandTwo<T, U>(IBaseSignal signal, T type1, U type2)
         {
             var command = getCommand(signal.GetType());
             (command as Command<T, U>).Execute(type1, type2);
+            releaseCommand(command);
         }
 
         private void GenericCommandThree<T, U, V>(IBaseSignal signal, T type1, U type2, V type3)
         {
             var command = getCommand(signal.GetType());
             (command as Command<T, U, V>).Execute(type1, type2, type3);
+            releaseCommand(command);
         }
 
         private void GenericCommandFour<T, U, V, W>(IBaseSignal signal)
@@ -174,35 +178,50 @@ namespace Iniectio.Lite
             var command = getCommand(signal.GetType());
             var bs = signal as BaseSignal<T, U, V, W>; // exception case
             (command as Command<T, U, V, W>).Execute(bs.Type1, bs.Type2, bs.Type3, bs.Type4);
+            releaseCommand(command);
         }
 
-        protected ICommand getCommand(Type key)
+        protected ICommand createCommandForPool(Type type)
         {
-            var binding = GetBinding(key);
-            if(binding.IsPooled)
+            injectionBinder.Map(typeof(ICommand), type);
+            var cmd = injectionBinder.GetInstance(typeof(ICommand)) as ICommand;
+            injectionBinder.TryToInject(cmd);
+            injectionBinder.UnBind(typeof(ICommand));
+            return cmd;
+        }
+
+        protected ICommand getCommand(Type t)
+        {
+            var binding = GetBinding(t);
+            var type = binding.Value as Type;
+            if(pool.ContainsKey(type))
             {
-                if(!poolDict.ContainsKey(key))
+                if(pool[type].Count > 0)
                 {
-                    // if not create one...
-                    var o = binding.Value;
-                    Type value = (o is Type) ? o as Type : o.GetType();
-                    var c = Activator.CreateInstance(value, null) as ICommand;
-                    injectionBinder.TryToInject(c);
-                    poolDict[key] = c;
+                    //create one and give...
+                    return pool[type].Dequeue();
                 }
-                return poolDict[key];
             }
 
             //make sure if you have command usage prequently, better to make it as pooled() to stay away from GC
             var cmdb = injectionBinder.GetBinding(typeof(ICommand));
             if(cmdb == null)
             {
-                cmdb = injectionBinder.Map(typeof(ICommand), binding.Value).ToMultiple();
+                cmdb = injectionBinder.Map(typeof(ICommand), type).ToMultiple();
             }
 
             var command = injectionBinder.GetInstance(cmdb);
             injectionBinder.TryToInject(command);
             return command as ICommand;
+        }
+
+        protected void releaseCommand(ICommand command)
+        {
+            var t = command.GetType();
+            if(pool.ContainsKey(t))
+            {
+                pool[t].Enqueue(command);
+            }
         }
 
         //both add and remove delegate methods are taken from strange since it is common function...
@@ -244,23 +263,27 @@ namespace Iniectio.Lite
         {
             var binding = GetBinding(key);
             var type = binding.Key.BaseType;
-            if (type.IsGenericType)
-            {
-                var gParams = type.GetGenericArguments();
-                switch (gParams.Length)
-                {
-                    case 1:
-                        return methodOne.MakeGenericMethod(gParams);
-                    case 2:
-                        return methodTwo.MakeGenericMethod(gParams);
-                    case 3:
-                        return methodThree.MakeGenericMethod(gParams);
-                    case 4:
-                        return methodFour.MakeGenericMethod(gParams);
-                }
-            }
+            var gtype = this.GetType();
+            var flags = BindingFlags.FlattenHierarchy |
+                         BindingFlags.SetProperty |
+                         BindingFlags.Public |
+                         BindingFlags.NonPublic |
+                         BindingFlags.Instance;
 
-            return methodZero;
+            var gParams = type.GetGenericArguments();
+            switch (gParams.Length)
+            {
+                case 0:
+                    return gtype.GetMethod("GenericCommandZero", flags);
+                case 1:
+                    return gtype.GetMethod("GenericCommandOne", flags).MakeGenericMethod(gParams);
+                case 2:
+                    return gtype.GetMethod("GenericCommandTwo", flags).MakeGenericMethod(gParams);
+                case 3:
+                    return gtype.GetMethod("GenericCommandThree", flags).MakeGenericMethod(gParams);
+                default:
+                    return gtype.GetMethod("GenericCommandFour", flags).MakeGenericMethod(gParams);
+            }
         }
     }
 }
