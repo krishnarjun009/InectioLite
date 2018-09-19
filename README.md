@@ -1,4 +1,4 @@
-# IniectioLite
+# Iniectio Lite
 
 Iniectio is a lite weight dependency framework for small and upto mid range projects. If your project is more than mid range I would prefer to choose Zenject or StrangeIoc.
 
