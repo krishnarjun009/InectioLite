@@ -11,6 +11,7 @@ namespace Iniectio.Lite
         
 		public override void mapBindings()
 		{
+            commandBinder.Map<TestSignal, TestCommand>().Pooled();
             injectionBinder.Map<SampleData>();
             injectionBinder.Map<TestSignal>();
             injectionBinder.Map<JumpInputSignal>();
@@ -19,7 +20,7 @@ namespace Iniectio.Lite
             //injectionBinder.Map<commandsignal>();
             //injectionBinder.Map<int>();
 
-            commandBinder.Map<TestSignal, TestCommand>();
+
             commandBinder.Map<commandsignal, genericcommand>().Pooled();
             commandBinder.Map<commandsignal2, genericcommand>().Pooled();
             //commandBinder.Map<commandsignal, genericcommand1>().ToName("another").Pooled();
@@ -81,6 +82,8 @@ namespace Iniectio.Lite
 
     public class TestCommand : Command
     {
+        [Inject] private SampleData data { get; set; }
+        
 		public override void Execute()
 		{
             //UnityEngine.Debug.Log("Command is working");

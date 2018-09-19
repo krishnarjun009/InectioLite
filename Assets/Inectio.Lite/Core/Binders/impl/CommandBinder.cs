@@ -91,10 +91,7 @@ namespace Iniectio.Lite
                     var t = binding.Value as Type;
                     if (!pool.ContainsKey(t))
                     {
-                        var cmd = createCommandForPool(t);
-                        var q = new Queue<ICommand>();
-                        q.Enqueue(cmd);
-                        pool[t] = q;
+                        pool[t] = new Queue<ICommand>();
                     }
                 }
             }
