@@ -86,7 +86,8 @@ Commands are useful to update game data or Make Server Api's calls from command 
  
    ###### Inject
    this attribute will work on property, field or any method to inject required dependencies.
-    - Syntax:
+   - Syntax:
+    
     ``` C#
     
           [Inject] private TestSignal testSignalP { get; set; } // property injection
