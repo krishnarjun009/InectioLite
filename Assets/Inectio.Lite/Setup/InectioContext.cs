@@ -19,7 +19,7 @@ namespace Iniectio.Lite
             //injectionBinder.Map<commandsignal>();
             //injectionBinder.Map<int>();
 
-            commandBinder.Map<TestSignal, TestCommand>().Pooled();
+            commandBinder.Map<TestSignal, TestCommand>();
             commandBinder.Map<commandsignal, genericcommand>().Pooled();
             commandBinder.Map<commandsignal2, genericcommand>().Pooled();
             //commandBinder.Map<commandsignal, genericcommand1>().ToName("another").Pooled();

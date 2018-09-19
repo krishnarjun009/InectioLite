@@ -214,6 +214,7 @@ namespace Iniectio.Lite
             var command = injectionBinder.GetInstance(cmdb);
             injectionBinder.TryToInject(command);
             return command as ICommand;
+            //return createCommandForPool(type); // will cause 10 times more GC...
         }
 
         protected void releaseCommand(ICommand command)
