@@ -83,8 +83,9 @@ Commands are useful to update game data or Make Server Api's calls from command 
    ```
    
    # Attributes
+ 
    ###### Inject
-    this attribute will work on property, field or any method to inject required dependencies.
+   this attribute will work on property, field or any method to inject required dependencies.
     - Syntax:
     ``` C#
     
@@ -105,7 +106,7 @@ Commands are useful to update game data or Make Server Api's calls from command 
           }
           
     ```
-      You can provide inject attribute to method parameters if there are multiple bindings with different names.
+   You can provide inject attribute to method parameters if there are multiple bindings with different names.
       
    ###### Listen
    This attribute is useful for adding listeners to signals in single line.
@@ -118,7 +119,7 @@ Commands are useful to update game data or Make Server Api's calls from command 
          Debug.Log("Testing Listen attribute");
         }
         
-        Listen(typeof(TestSignal), Listen.ListenType.AUTO)]
+        [Listen(typeof(TestSignal), Listen.ListenType.AUTO)]
         private void TestAuto()
         {
          Debug.Log("TOnly listens at OnEnable");
