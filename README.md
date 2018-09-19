@@ -87,6 +87,7 @@ Commands are useful to update game data or Make Server Api's calls from command 
     this attribute will work on property, field or any method to inject required dependencies.
     - Syntax:
     ``` C#
+    
           [Inject] private TestSignal testSignalP { get; set; } // property injection
           [Inject] private TestSignal testSignalF; // field injection
           private TestSignal _testSignal;
@@ -117,7 +118,7 @@ Commands are useful to update game data or Make Server Api's calls from command 
          Debug.Log("Testing Listen attribute");
         }
         
-        Listen(typeof(TestSignal), Listen.ListenType.AUTO]
+        Listen(typeof(TestSignal), Listen.ListenType.AUTO)]
         private void TestAuto()
         {
          Debug.Log("TOnly listens at OnEnable");
