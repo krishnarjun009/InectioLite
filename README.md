@@ -127,7 +127,7 @@ Commands are useful to update game data or Make Server Api's calls from command 
         
    ```
     
-    All Listen attributes ListenTypes are MANUAL by default means at OnDestroy time listeners will remove. If it is AUTO means listers will remove at OnDisable and will add at OnEnable. So if the gameobject is enable Method will listen otherwise listener will remove.
+All Listen attributes ListenTypes are MANUAL by default means at OnDestroy time listeners will remove. If it is AUTO means listers will remove at OnDisable and will add at OnEnable. So if the gameobject is enable Method will listen otherwise listener will remove.
 
 Check the Demo Project for Better understanding. It is lightweight IOC Framework for smaller or below mid range projects. Add if you find any issues pls mention in Issues Section.
 
