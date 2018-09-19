@@ -6,6 +6,7 @@ namespace com.bonucyballs.Iniectio
     public class GameManager : View
     {
         [Inject] private GameStartNotifierSignal gameStartNotifierSignal { get; set; }
+        [Inject] private SaveGameDataSignal saveGameDataSignal { get; set; }
         [Inject] IGameData gameData { get; set; }
 
         private GameObject currentLevelInstance;
@@ -44,7 +45,7 @@ namespace com.bonucyballs.Iniectio
         [Listen(typeof(LevelCompletedSignal))]
         private void OnLevelCompleted()
         {
-            gameData.SaveCurrentLevel();
+            saveGameDataSignal.Dispatch();
             Destroy(currentLevelInstance);
             currentLevelInstance = null;
         }

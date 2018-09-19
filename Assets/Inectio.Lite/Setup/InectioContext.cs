@@ -11,30 +11,32 @@ namespace Iniectio.Lite
         
 		public override void mapBindings()
 		{
-            injectionBinder.Map<SampleData>();
-            injectionBinder.Map<TestSignal>();
-            injectionBinder.Map<JumpInputSignal>();
-            injectionBinder.Map<OnPlayerDiedSignal>();
-            injectionBinder.Map<ISample, SampleData>();
-            //injectionBinder.Map<commandsignal>();
-            //injectionBinder.Map<int>();
+            //injectionBinder.Map<SampleData>();
+            //injectionBinder.Map<TestSignal>();
+            //injectionBinder.Map<JumpInputSignal>();
+            //injectionBinder.Map<OnPlayerDiedSignal>();
+            //injectionBinder.Map<ISample, SampleData>();
+            ////injectionBinder.Map<commandsignal>();
+            ////injectionBinder.Map<int>();
 
-            commandBinder.Map<TestSignal, TestCommand>().Pooled();
-            commandBinder.Map<commandsignal, genericcommand>().Pooled();
-            commandBinder.Map<commandsignal2, genericcommand>().Pooled();
+            //commandBinder.Map<TestSignal, TestCommand>().Pooled();
+            //commandBinder.Map<commandsignal, genericcommand>().Pooled();
+            //commandBinder.Map<commandsignal2, genericcommand>().Pooled();
             //commandBinder.Map<commandsignal, genericcommand1>().ToName("another").Pooled();
             //commandBinder.Map<commandsignal1, genericcommand>().Pooled();
 
             //Bouncy Ball Inections...
-            //injectionBinder.Map<LevelCompletedSignal>();
-            //injectionBinder.Map<LevelFailedSignal>();
-            //injectionBinder.Map<OnPlayClickSignal>();
-            //injectionBinder.Map<OnHomeClickSignal>();
-            //injectionBinder.Map<OnNextLevelClickSignal>();
-            //injectionBinder.Map<OnReloadLevelClickSignal>();
-            //injectionBinder.Map<BallInputSignal>();
-            //injectionBinder.Map<GameStartNotifierSignal>();
-            //injectionBinder.Map<IGameData, GameData>();
+            injectionBinder.Map<LevelCompletedSignal>();
+            injectionBinder.Map<LevelFailedSignal>();
+            injectionBinder.Map<OnPlayClickSignal>();
+            injectionBinder.Map<OnHomeClickSignal>();
+            injectionBinder.Map<OnNextLevelClickSignal>();
+            injectionBinder.Map<OnReloadLevelClickSignal>();
+            injectionBinder.Map<BallInputSignal>();
+            injectionBinder.Map<GameStartNotifierSignal>();
+            injectionBinder.Map<IGameData, GameData>();
+
+            commandBinder.Map<SaveGameDataSignal, SaveGameDataCommand>();
 
            
         }
