@@ -185,7 +185,7 @@ namespace Iniectio.Lite
         {
             injectionBinder.Map(typeof(ICommand), type);
             var cmd = injectionBinder.GetInstance(typeof(ICommand)) as ICommand;
-            injectionBinder.TryToInject(cmd);
+            injectionBinder.GetInjector().Inject(cmd, true);
             injectionBinder.UnBind(typeof(ICommand));
             return cmd;
         }
@@ -196,11 +196,12 @@ namespace Iniectio.Lite
             var type = binding.Value as Type;
             if(pool.ContainsKey(type))
             {
-                if(pool[type].Count > 0)
+                if(pool[type].Count == 0)
                 {
                     //create one and give...
-                    return pool[type].Dequeue();
+                    return createCommandForPool(type);
                 }
+                return pool[type].Dequeue();
             }
 
             //make sure if you have command usage prequently, better to make it as pooled() to stay away from GC

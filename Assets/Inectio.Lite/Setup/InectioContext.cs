@@ -67,7 +67,7 @@ namespace Iniectio.Lite
 		public override void Execute(int type1, int type2, string type3, int type4)
 		{
             //UnityEngine.Debug.Log("Command - type3 data: " + type3);
-            //testSignal.Dispatch();
+            testSignal.Dispatch();
 		}
 	}
 

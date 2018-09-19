@@ -10,6 +10,7 @@ namespace Iniectio.Lite
         IInjectionBinding Map(Type type);
         IInjectionBinding GetBinding(Type key);
         IInjectionBinding GetBinding(Type key, string name);
+        Injector GetInjector();
         void UnBind<T>();
         void UnBind(Type key);
         void UnBind(Type key, string name);
