@@ -86,7 +86,7 @@ Commands are useful to update game data or Make Server Api's calls from command 
    ###### Inject
     this attribute will work on property, field or any method to inject required dependencies.
     - Syntax:
-      ```C#
+    ``` C#
           [Inject] private TestSignal testSignalP { get; set; } // property injection
           [Inject] private TestSignal testSignalF; // field injection
           private TestSignal _testSignal;
@@ -103,13 +103,13 @@ Commands are useful to update game data or Make Server Api's calls from command 
             _testSignal = testSignal;
           }
           
-      ```
+    ```
       You can provide inject attribute to method parameters if there are multiple bindings with different names.
       
    ###### Listen
    This attribute is useful for adding listeners to signals in single line.
    - Syntax:
-    ```C#
+   ``` C#
         
         [Listen(typeof(TestSignal)]
         private void Test()
@@ -123,7 +123,7 @@ Commands are useful to update game data or Make Server Api's calls from command 
          Debug.Log("TOnly listens at OnEnable");
         }
         
-    ```
+   ```
     
     All Listen attributes ListenTypes are MANUAL by default means at OnDestroy time listeners will remove. If it is AUTO means listers will remove at OnDisable and will add at OnEnable. So if the gameobject is enable Method will listen otherwise listener will remove.
 
