@@ -27,17 +27,18 @@ namespace Iniectio.Lite
             //commandBinder.Map<commandsignal1, genericcommand>().Pooled();
 
             //Bouncy Ball Inections...
-            injectionBinder.Map<LevelCompletedSignal>();
-            injectionBinder.Map<LevelFailedSignal>();
+            injectionBinder.Map<LevelCompletedSignal>().ToSingle();
+            injectionBinder.Map<LevelFailedSignal>().ToMultiple();
             injectionBinder.Map<OnPlayClickSignal>();
             injectionBinder.Map<OnHomeClickSignal>();
             injectionBinder.Map<OnNextLevelClickSignal>();
             injectionBinder.Map<OnReloadLevelClickSignal>();
-            injectionBinder.Map<BallInputSignal>();
+            injectionBinder.Map<InputDirectionSignal>();
             injectionBinder.Map<GameStartNotifierSignal>();
             injectionBinder.Map<IGameData, GameData>();
              
             commandBinder.Map<SaveGameDataSignal, SaveGameDataCommand>();
+            commandBinder.Map<BallInputSignal, InputDirectionCommand>().Pooled();
         }
 	}
 
@@ -46,7 +47,7 @@ namespace Iniectio.Lite
 
     }
 
-    public class SampleData : ISample
+    public class SampleData
     {
         [Inject] private TestSignal testSignal { get; set; }
         public void Print()

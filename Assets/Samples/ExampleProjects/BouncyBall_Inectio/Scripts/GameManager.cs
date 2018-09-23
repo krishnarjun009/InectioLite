@@ -9,6 +9,12 @@ namespace com.bonucyballs.Iniectio
         [Inject] private SaveGameDataSignal saveGameDataSignal { get; set; }
         [Inject] IGameData gameData { get; set; }
 
+        public override void OnRegister()
+        {
+            base.OnRegister();
+            //gameStartNotifierSignal.AddListener()
+        }
+
         private GameObject currentLevelInstance;
 
         [Listen(typeof(OnNextLevelClickSignal))]

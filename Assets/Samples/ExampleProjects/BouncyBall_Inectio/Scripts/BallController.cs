@@ -13,7 +13,7 @@ namespace com.bonucyballs.Iniectio
 
     public class BallController : View
     {
-        [Inject] private LevelCompletedSignal levelCompletedSignal;
+        private LevelCompletedSignal levelCompletedSignal;
 
         [SerializeField] private float moveSpeed = 3f;
         [SerializeField] private float jumpHeight;
@@ -22,10 +22,17 @@ namespace com.bonucyballs.Iniectio
         private bool leftInput;
         private bool rightInput;
         private bool isGrounded;
+        private bool isInputApplied = false;
         private bool isHighJumpApplied;
         private float startJumpHeight;
+        private int direction;
         private Vector3 startPosition;
-        private InputDirection direction;
+
+        [Inject]
+        private void InjectObjes(LevelCompletedSignal level)
+        {
+            levelCompletedSignal = level;
+        }
 
 		protected override void Start()
 		{
@@ -34,13 +41,13 @@ namespace com.bonucyballs.Iniectio
             // save the horizontal center of the screen
             startPosition = transform.position;
             startJumpHeight = jumpHeight;
-            direction = InputDirection.NONE;
 		}
 
-        [Listen(typeof(BallInputSignal))]
-        private void OnBallInputHandler(InputDirection direction)
+        [Listen(typeof(InputDirectionSignal))]
+        private void OnBallInputHandler(int direction)
         {
             Debug.Log("Direction " + direction);
+            this.isInputApplied = true;
             this.direction = direction;
         }
 
@@ -52,18 +59,11 @@ namespace com.bonucyballs.Iniectio
                 Jump();
             }
 
-            if (direction == InputDirection.NONE) return;
-
-            if (direction == InputDirection.LEFT)
+            if(isInputApplied)
             {
-                direction = InputDirection.NONE;
-                Move(-1);
+                isInputApplied = false;
+                Move(direction);
             }
-            else if (direction == InputDirection.RIGHT)
-            {
-                direction = InputDirection.NONE;
-                Move(1);
-            }   
         }
 
         protected virtual void Move(int direction)

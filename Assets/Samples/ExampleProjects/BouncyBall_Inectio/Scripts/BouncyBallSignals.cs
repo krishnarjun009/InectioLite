@@ -12,4 +12,5 @@ namespace com.bonucyballs.Iniectio
     public class GameStartNotifierSignal : Signal<int> { }
     public class OnPlayClickSignal : Signal { }
     public class SaveGameDataSignal : Signal { }
+    public class InputDirectionSignal : Signal<int> { }
 }

@@ -11,7 +11,7 @@ namespace com.bonucyballs.Iniectio
         int Level { get; }
     }
 
-    public class GameData : IGameData
+    public class GameData
     {
         private int currentLevel = 1;
 

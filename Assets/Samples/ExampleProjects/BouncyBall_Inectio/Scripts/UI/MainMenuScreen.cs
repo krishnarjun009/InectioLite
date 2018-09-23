@@ -12,7 +12,7 @@ namespace com.bonucyballs.Iniectio
         public void OnPlayClick()
         {
             Debug.Log("Play clicked " + gameData.Level);
-            gameStartNotifierSignal.Dispatch(gameData.Level);
+           // gameStartNotifierSignal.Dispatch(gameData.Level);
             onPlayClickSignal.Dispatch();
             gameObject.SetActive(false);
         }

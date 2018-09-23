@@ -6,7 +6,7 @@ namespace com.bonucyballs.Iniectio
 {
     public class SaveGameDataCommand : Command
     {
-        [Inject] private IGameData gameData;
+        [Inject("gamedata")] private IGameData gameData;
 
 		public override void Execute()
 		{
