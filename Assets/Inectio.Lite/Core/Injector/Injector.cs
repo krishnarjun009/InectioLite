@@ -55,14 +55,10 @@ namespace Iniectio.Lite
         {
             //todo: map all relfections to reflection binder. so when u get the same view again you can get the maps directly...
             var reflected = reflectionBinder.Get(target.GetType());
-            if (!reflected.preReflected || forceInject) // dont do injections again if it is already pre generated...
-            {
-                //UnityEngine.Debug.Log("Inecting " + target);
-                injectProperties(reflected.properties, target);
-                injectFields(reflected.fields, target);
-                injectMethods(reflected.methods, target);
-                injectListenMethods(reflected.listenMethods, target);
-            }
+            injectProperties(reflected.properties, target);
+            injectFields(reflected.fields, target);
+            injectMethods(reflected.methods, target);
+            injectListenMethods(reflected.listenMethods, target);
         }
 
         public void OnRemove(object target)
