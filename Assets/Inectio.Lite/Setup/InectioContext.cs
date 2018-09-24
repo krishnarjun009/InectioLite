@@ -47,7 +47,7 @@ namespace Iniectio.Lite
 
     }
 
-    public class SampleData
+    public class SampleData : ISample
     {
         [Inject] private TestSignal testSignal { get; set; }
         public void Print()
