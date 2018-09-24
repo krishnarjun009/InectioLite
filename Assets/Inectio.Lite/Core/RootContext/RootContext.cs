@@ -43,7 +43,6 @@ namespace Iniectio.Lite
             injectionBinder.Map(typeof(IInjectionBinder), injectionBinder); // self inject...
             injectionBinder.Map<ICommandBinder, CommandBinder>();
             _commandBinder = injectionBinder.GetInstance<ICommandBinder>();
-            injectionBinder.TryToInject(_commandBinder);
             injectionBinder.UnBind<IInjectionBinder>();
         }
     }

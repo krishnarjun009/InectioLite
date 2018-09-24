@@ -131,7 +131,9 @@ namespace Iniectio.Lite
         virtual public object GetInstance(Type key, string name)
         {
             var binding = GetBinding(key, name);
-            return injector.GetInstance(binding as IInjectionBinding);
+            var obj = injector.GetInstance(binding as IInjectionBinding);
+            TryToInject(obj);
+            return obj;
         }
 
         virtual public object GetInstance(IInjectionBinding binding)
