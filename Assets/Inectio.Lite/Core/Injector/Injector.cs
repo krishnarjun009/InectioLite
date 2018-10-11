@@ -80,7 +80,7 @@ namespace Iniectio.Lite
                 }
             }
 
-            reflectionBinder.OnRemove();
+            reflectionBinder.OnRemove(target.GetType());
         }
 
         private object getValue(Type type, string name)

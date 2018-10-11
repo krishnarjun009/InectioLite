@@ -13,5 +13,6 @@ namespace Iniectio.Lite
         void ResolveBinding(IBinding binding);
         ReflectedItems Get(Type type);
         void OnRemove();
-    }
+		void OnRemove(Type type);
+	}
 }

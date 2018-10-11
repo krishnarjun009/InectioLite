@@ -24,6 +24,7 @@ namespace Iniectio.Lite
         void ResolveBinding(IBinding binding);
         void OnRemove(IView view);
         void OnAutoSignalHandler(bool enable, object target);
+        void OnRemove();
     }
 
     public class InjectionBinder : CoreBinder, IInjectionBinder
@@ -126,6 +127,11 @@ namespace Iniectio.Lite
         virtual public void OnRemove(IView view)
         {
             injector.OnRemove(view);
+        }
+
+        virtual public void OnRemove()
+        {
+            bindings.Clear();
         }
 
         virtual public object GetInstance(Type key, string name)

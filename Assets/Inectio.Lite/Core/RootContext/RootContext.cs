@@ -29,6 +29,7 @@ namespace Iniectio.Lite
         virtual public void OnRemove()
         {
             commandBinder.OnRemove();
+            injectionBinder.OnRemove();
             //UnityEngine.Debug.Log("On removing is calling from context");
         }
 

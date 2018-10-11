@@ -42,6 +42,12 @@ namespace Iniectio.Lite
             bindings.Clear();
         }
 
+        public void OnRemove(Type type)
+        {
+            if (bindings.ContainsKey(type))
+                bindings.Remove(type);
+        }
+
 		private void mapProperties(ReflectedItems reflected, Type type)
         {
             //var properties = new List<PropertyAttributes>();
